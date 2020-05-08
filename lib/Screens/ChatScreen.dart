@@ -11,7 +11,7 @@ class MyChatScreen extends StatefulWidget {
   final String title;
 
   @override
-  _MyChatState createState() => new _MyChatState();
+  _MyChatState createState() =>  _MyChatState();
 }
 
 class _MyChatState extends State<MyChatScreen> {
@@ -26,47 +26,47 @@ class _MyChatState extends State<MyChatScreen> {
     DateTime time = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(time);
 
-    return new Scaffold(
-        appBar: new AppBar(
+    return  Scaffold(
+        appBar:  AppBar(
           title: const Text(
             'Chat App',
             style: TextStyle(color: Colors.red),
             textAlign: TextAlign.center,
           ),
         ),
-        body: new Container(
+        body:  Container(
             width: double.infinity,
             height: double.infinity,
             color: Colors.white,
-            child: new Container(
-              child: new Column(
+            child:  Container(
+              child:  Column(
                 children: <Widget>[
                   //Chat list
-                  new Flexible(
-                    child: new ListView.builder(
-                      padding: new EdgeInsets.all(8.0),
+                   Flexible(
+                    child:  ListView.builder(
+                      padding:  EdgeInsets.all(8.0),
                       reverse: true,
                       itemBuilder: (_, int index) => _messages[index],
                       itemCount: _messages.length,
                     ),
                   ),
-                  new Divider(height: 1.0),
-                  new Container(
+                   Divider(height: 1.0),
+                   Container(
                       decoration:
-                          new BoxDecoration(color: Theme.of(context).cardColor),
-                      child: new IconTheme(
-                          data: new IconThemeData(
+                           BoxDecoration(color: Theme.of(context).cardColor),
+                      child:  IconTheme(
+                          data:  IconThemeData(
                               color: Theme.of(context).accentColor),
-                          child: new Container(
+                          child:  Container(
                             margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: new Row(
+                            child:  Row(
                               children: <Widget>[
                                 //left send button
 
-                                new Container(
+                                 Container(
                                   width: 48.0,
                                   height: 48.0,
-                                  child: new IconButton(
+                                  child:  IconButton(
                                       icon: Image.asset(
                                           "assets/images/send_in.png"),
                                       onPressed: () => _sendMsg(
@@ -76,22 +76,22 @@ class _MyChatState extends State<MyChatScreen> {
                                 ),
 
                                 //Enter Text message here
-                                new Flexible(
-                                  child: new TextField(
+                                 Flexible(
+                                  child:  TextField(
                                     controller: _textController,
-                                    decoration: new InputDecoration.collapsed(
+                                    decoration:  InputDecoration.collapsed(
                                         hintText: "Enter message"),
                                   ),
                                 ),
 
                                 //right send button
 
-                                new Container(
+                                 Container(
                                   margin:
-                                      new EdgeInsets.symmetric(horizontal: 2.0),
+                                       EdgeInsets.symmetric(horizontal: 2.0),
                                   width: 48.0,
                                   height: 48.0,
-                                  child: new IconButton(
+                                  child:  IconButton(
                                       icon: Image.asset(
                                           "assets/images/send_out.png"),
                                       onPressed: () => _sendMsg(
@@ -117,7 +117,7 @@ class _MyChatState extends State<MyChatScreen> {
 //          backgroundColor: Colors.blue);
     } else {
       _textController.clear();
-      Message message = new Message(
+      Message message =  Message(
         msg: msg,
         direction: messageDirection,
         dateTime: date,
