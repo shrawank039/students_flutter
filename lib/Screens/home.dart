@@ -16,12 +16,12 @@ class Home extends StatelessWidget {
     'Profile'
   ];
   final carIcons = [
-    'Images/schedule.png',
-    'Images/progress.png',
-    'Images/announcement.png',
-    'Images/chat.png',
-    'Images/suppoert0.png',
-    'Images/profile.png'
+    'assets/images/schedule.png',
+    'assets/images/progress.png',
+    'assets/images/announcement.png',
+    'assets/images/chat.png',
+    'assets/images/suppoert0.png',
+    'assets/images/profile.png'
   ];
 
   @override
