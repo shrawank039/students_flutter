@@ -26,6 +26,7 @@ class _MyChatState extends State<MyChatScreen> {
   @override
   void initState() {
     super.initState();
+    _reconnectSocket();
   }
 
   @override
@@ -120,18 +121,9 @@ class _MyChatState extends State<MyChatScreen> {
   }
 
   _connectSocket() {
-    //update your domain before using
-    /*socketIO = new SocketIO("http://127.0.0.1:3000", "/chat",
-        query: "userId=21031", socketStatusCallback: _socketStatus);*/
     socketIO = SocketIOManager().createSocketIO("http://139.59.218.118:8080", "/chat", query: "userId=21031", socketStatusCallback: _socketStatus);
-
-    //call init socket before doing anything
     socketIO.init();
-
-    //subscribe event
     socketIO.subscribe("group_chat_room", _onSocketInfo);
-
-    //connect socket
     socketIO.connect();
   }
 
@@ -194,6 +186,9 @@ class _MyChatState extends State<MyChatScreen> {
   @override
   void dispose() {
     _textController.dispose();
+    _unSubscribes();
+    _disconnectSocket();
+    _destroySocket();
     super.dispose();
   }
 }
