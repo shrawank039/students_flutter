@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Colors.white,
         fontFamily: 'Gamja Flower',
       ),
-      home: new SplashScreen(),
+      home: SplashScreen(),
       routes: <String, WidgetBuilder>{
         ANIMATED_SPLASH: (BuildContext context) => new SplashScreen(),
         CHAT_SCREEN: (BuildContext context) => new MyChatScreen()
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline,
             ),
           ],
         ),
