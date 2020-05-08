@@ -1,10 +1,13 @@
 import 'dart:core';
-
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:students/Utils/Message.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
 
 class MyChatScreen extends StatefulWidget {
   const MyChatScreen({Key key, this.title}) : super(key: key);
@@ -15,17 +18,20 @@ class MyChatScreen extends StatefulWidget {
 }
 
 class _MyChatState extends State<MyChatScreen> {
-  final List<Message> _messages = <Message>[];
 
-  // Create a text controller. We will use it to retrieve the current value
-  // of the TextField!
+  final List<Message> _messages = <Message>[];
   final _textController = TextEditingController();
+  SocketIO socketIO;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     DateTime time = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(time);
-
     return  Scaffold(
         appBar:  AppBar(
           title: const Text(
@@ -52,53 +58,43 @@ class _MyChatState extends State<MyChatScreen> {
                   ),
                    Divider(height: 1.0),
                    Container(
-                      decoration:
-                           BoxDecoration(color: Theme.of(context).cardColor),
+                      decoration: BoxDecoration(color: Theme.of(context).cardColor),
                       child:  IconTheme(
-                          data:  IconThemeData(
-                              color: Theme.of(context).accentColor),
+                          data:  IconThemeData(color: Theme.of(context).accentColor),
                           child:  Container(
                             margin: const EdgeInsets.symmetric(horizontal: 2.0),
                             child:  Row(
                               children: <Widget>[
                                 //left send button
-
                                  Container(
                                   width: 48.0,
                                   height: 48.0,
                                   child:  IconButton(
-                                      icon: Image.asset(
-                                          "assets/images/send_in.png"),
-                                      onPressed: () => _sendMsg(
-                                          _textController.text,
-                                          'left',
-                                          formattedDate)),
+                                      icon: Image.asset("assets/images/send_in.png"),
+                                      onPressed: () => _sendMsg(_textController.text, 'left', formattedDate)
+                                  ),
                                 ),
 
                                 //Enter Text message here
                                  Flexible(
                                   child:  TextField(
                                     controller: _textController,
-                                    decoration:  InputDecoration.collapsed(
-                                        hintText: "Enter message"),
+                                    decoration:  InputDecoration.collapsed(hintText: "Enter message"),
                                   ),
                                 ),
 
                                 //right send button
 
                                  Container(
-                                  margin:
-                                       EdgeInsets.symmetric(horizontal: 2.0),
+                                  margin: EdgeInsets.symmetric(horizontal: 2.0),
                                   width: 48.0,
                                   height: 48.0,
                                   child:  IconButton(
-                                      icon: Image.asset(
-                                          "assets/images/send_out.png"),
-                                      onPressed: () => _sendMsg(
-                                          _textController.text,
-                                          'right',
-                                          formattedDate)),
+                                      icon: Image.asset("assets/images/send_out.png"),
+                                      onPressed: () => _sendMsg(_textController.text, 'right', formattedDate)
+                                  ),
                                 ),
+
                               ],
                             ),
                           ))),
@@ -109,12 +105,7 @@ class _MyChatState extends State<MyChatScreen> {
 
   void _sendMsg(String msg, String messageDirection, String date) {
     if (msg.length == 0) {
-//      Fluttertoast.showToast(
-//          msg: "Please Enter Message",
-//          toastLength: Toast.LENGTH_SHORT,
-//          gravity: ToastGravity.BOTTOM,
-//          timeInSecForIos: 1,
-//          backgroundColor: Colors.blue);
+
     } else {
       _textController.clear();
       Message message =  Message(
@@ -128,15 +119,80 @@ class _MyChatState extends State<MyChatScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  _connectSocket() {
+    //update your domain before using
+    /*socketIO = new SocketIO("http://127.0.0.1:3000", "/chat",
+        query: "userId=21031", socketStatusCallback: _socketStatus);*/
+    socketIO = SocketIOManager().createSocketIO("http://127.0.0.1:3000", "/chat", query: "userId=21031", socketStatusCallback: _socketStatus);
+
+    //call init socket before doing anything
+    socketIO.init();
+
+    //subscribe event
+    socketIO.subscribe("group_chat_room", _onSocketInfo);
+
+    //connect socket
+    socketIO.connect();
+  }
+
+  _subscribes() {
+    if (socketIO != null) {
+      socketIO.subscribe("group_chat_room", _onReceiveChatMessage);
+    }
+  }
+
+  _unSubscribes() {
+    if (socketIO != null) {
+      socketIO.unSubscribe("group_chat_room", _onReceiveChatMessage);
+    }
+  }
+
+  _onSocketInfo(dynamic data) {
+    print("Socket info: " + data);
+  }
+
+  _socketStatus(dynamic data) {
+    print("Socket status: " + data);
+  }
+
+  _reconnectSocket() {
+    if (socketIO == null) {
+      _connectSocket();
+    } else {
+      socketIO.connect();
+    }
+  }
+
+  _disconnectSocket() {
+    if (socketIO != null) {
+      socketIO.disconnect();
+    }
+  }
+
+  _destroySocket() {
+    if (socketIO != null) {
+      SocketIOManager().destroySocket(socketIO);
+    }
+  }
+
+  void _sendChatMessage(String msg) async {
+    if (socketIO != null) {
+      String jsonData = json.encode(msg);
+      socketIO.sendMessage("group_chat_room", jsonData, _onReceiveChatMessage);
+    }
+  }
+
+  void socketInfo(dynamic message) {
+    print("Socket Info: " + message);
+  }
+
+  void _onReceiveChatMessage(dynamic message) {
+    var jsonMessage = json.decode(message.toString());
+    print("Message from UFO: " + message);
   }
 
   @override
   void dispose() {
-    // Every listener should be canceled, the same should be done with this stream.
-    // Clean up the controller when the Widget is disposed
     _textController.dispose();
     super.dispose();
   }
