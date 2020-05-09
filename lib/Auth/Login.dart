@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:students/Dashboard/Dashboard.dart';
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '../ServerAPI.dart';
 
 void main() {
@@ -135,9 +135,22 @@ class _LoginState extends State<Login> {
         });
 
         if( result["status"] == "success"){
+
+          // Store Data in local storage
           await ServerAPI().setAuthUser(result["data"]);
+
+          // Update device id
+          var status = await OneSignal.shared.getPermissionSubscriptionState();
+          var playerId = status.subscriptionStatus.userId;
+          await ServerAPI().updateDeviceID({
+            "student_id" : result["data"]["id"].toString(),
+            "device_id" : playerId.toString()
+          });
+
+          // Navigate to Dashboard
           Route route = MaterialPageRoute(builder: (context) => Dashboard());
           Navigator.pushReplacement(context, route);
+
         } else {
           _scaffolkey.currentState.showSnackBar(ServerAPI.errorToast(result["msg"].toString()));
         }

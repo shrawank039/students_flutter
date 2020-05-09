@@ -69,6 +69,15 @@ class ServerAPI {
     return isLogin;
   }
 
+  Future<Map<String, dynamic>> updateDeviceID(data) async {
+    final response = await http.post(apiRoot+"/updateStudentDeviceId", headers: _buildHeader(), body: data);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
   // SERVER SIDE API FUNCTIONS //
 
   Future<Map<String, dynamic>> authRequest(data) async {
