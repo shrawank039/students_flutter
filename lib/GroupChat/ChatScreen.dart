@@ -1,8 +1,13 @@
 import 'dart:core';
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:students/Utils/Message.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
 
 class MyChatScreen extends StatefulWidget {
 
@@ -14,39 +19,44 @@ class MyChatScreen extends StatefulWidget {
   MyChatScreen(this.teacher, this.subject, this.chat_group_id, this.calss_id);
 
   @override
-  _MyChatState createState() => _MyChatState();
+  _MyChatState createState() =>  _MyChatState();
 }
 
 class _MyChatState extends State<MyChatScreen> {
+
   final List<Message> _messages = <Message>[];
-  // Create a text controller. We will use it to retrieve the current value
-  // of the TextField!
   final _textController = TextEditingController();
+  SocketIO socketIO;
+
+  @override
+  void initState() {
+    super.initState();
+    _reconnectSocket();
+  }
 
   @override
   Widget build(BuildContext context) {
     DateTime time = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(time);
-
-    return Scaffold(
-        appBar: AppBar(
+    return  Scaffold(
+        appBar:  AppBar(
           title: const Text(
             'Chat App',
             style: TextStyle(color: Colors.red),
             textAlign: TextAlign.center,
           ),
         ),
-        body: Container(
+        body:  Container(
             width: double.infinity,
             height: double.infinity,
             color: Colors.white,
-            child: Container(
-              child: Column(
+            child:  Container(
+              child:  Column(
                 children: <Widget>[
                   //Chat list
                   Flexible(
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
+                    child:  ListView.builder(
+                      padding:  EdgeInsets.all(8.0),
                       reverse: true,
                       itemBuilder: (_, int index) => _messages[index],
                       itemCount: _messages.length,
@@ -54,35 +64,28 @@ class _MyChatState extends State<MyChatScreen> {
                   ),
                   Divider(height: 1.0),
                   Container(
-                      decoration:
-                          BoxDecoration(color: Theme.of(context).cardColor),
-                      child: IconTheme(
-                          data: IconThemeData(
-                              color: Theme.of(context).accentColor),
-                          child: Container(
+                      decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                      child:  IconTheme(
+                          data:  IconThemeData(color: Theme.of(context).accentColor),
+                          child:  Container(
                             margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Row(
+                            child:  Row(
                               children: <Widget>[
                                 //left send button
-
                                 Container(
                                   width: 48.0,
                                   height: 48.0,
-                                  child: IconButton(
-                                      icon: Image.asset(
-                                          "assets/images/send_in.png"),
-                                      onPressed: () => _sendMsg(
-                                          _textController.text,
-                                          'left',
-                                          formattedDate)),
+                                  child:  IconButton(
+                                      icon: Image.asset("assets/images/send_in.png"),
+                                      onPressed: () => _sendMsg(_textController.text, 'left', formattedDate)
+                                  ),
                                 ),
 
                                 //Enter Text message here
                                 Flexible(
-                                  child: TextField(
+                                  child:  TextField(
                                     controller: _textController,
-                                    decoration: InputDecoration.collapsed(
-                                        hintText: "Enter message"),
+                                    decoration:  InputDecoration.collapsed(hintText: "Enter message"),
                                   ),
                                 ),
 
@@ -92,14 +95,12 @@ class _MyChatState extends State<MyChatScreen> {
                                   margin: EdgeInsets.symmetric(horizontal: 2.0),
                                   width: 48.0,
                                   height: 48.0,
-                                  child: IconButton(
-                                      icon: Image.asset(
-                                          "assets/images/send_out.png"),
-                                      onPressed: () => _sendMsg(
-                                          _textController.text,
-                                          'right',
-                                          formattedDate)),
+                                  child:  IconButton(
+                                      icon: Image.asset("assets/images/send_out.png"),
+                                      onPressed: () => _sendMsg(_textController.text, 'right', formattedDate)
+                                  ),
                                 ),
+
                               ],
                             ),
                           ))),
@@ -110,9 +111,10 @@ class _MyChatState extends State<MyChatScreen> {
 
   void _sendMsg(String msg, String messageDirection, String date) {
     if (msg.length == 0) {
+
     } else {
       _textController.clear();
-      Message message = Message(
+      Message message =  Message(
         msg: msg,
         direction: messageDirection,
         dateTime: date,
@@ -123,16 +125,75 @@ class _MyChatState extends State<MyChatScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  _connectSocket() {
+    socketIO = SocketIOManager().createSocketIO("http://139.59.218.118:8080", "/chat", query: "userId=21031", socketStatusCallback: _socketStatus);
+    socketIO.init();
+    socketIO.subscribe("group_chat_room", _onSocketInfo);
+    socketIO.connect();
+  }
+
+  _subscribes() {
+    if (socketIO != null) {
+      socketIO.subscribe("group_chat_room", _onReceiveChatMessage);
+    }
+  }
+
+  _unSubscribes() {
+    if (socketIO != null) {
+      socketIO.unSubscribe("group_chat_room", _onReceiveChatMessage);
+    }
+  }
+
+  _onSocketInfo(dynamic data) {
+    print("Socket info: " + data);
+  }
+
+  _socketStatus(dynamic data) {
+    print("Socket status: " + data);
+  }
+
+  _reconnectSocket() {
+    if (socketIO == null) {
+      _connectSocket();
+    } else {
+      socketIO.connect();
+    }
+  }
+
+  _disconnectSocket() {
+    if (socketIO != null) {
+      socketIO.disconnect();
+    }
+  }
+
+  _destroySocket() {
+    if (socketIO != null) {
+      SocketIOManager().destroySocket(socketIO);
+    }
+  }
+
+  void _sendChatMessage(String msg) async {
+    if (socketIO != null) {
+      String jsonData = json.encode(msg);
+      socketIO.sendMessage("group_chat_room", jsonData, _onReceiveChatMessage);
+    }
+  }
+
+  void socketInfo(dynamic message) {
+    print("Socket Info: " + message);
+  }
+
+  void _onReceiveChatMessage(dynamic message) {
+    var jsonMessage = json.decode(message.toString());
+    print("Message from UFO: " + message);
   }
 
   @override
   void dispose() {
-    // Every listener should be canceled, the same should be done with this stream.
-    // Clean up the controller when the Widget is disposed
     _textController.dispose();
+    _unSubscribes();
+    _disconnectSocket();
+    _destroySocket();
     super.dispose();
   }
 }

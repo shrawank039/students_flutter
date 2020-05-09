@@ -24,6 +24,7 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text("Dashboard"),
@@ -42,7 +43,7 @@ class Dashboard extends StatelessWidget {
                       // Go to chat page
                       if(index == 3 ){
                         Route route = MaterialPageRoute(builder: (context) => MyChatScreen("1", "English", "my_group_id", "2"));
-                        Navigator.pushReplacement(context, route);
+                        Navigator.push(context, route);
                       }
                     },
                     child: Row(
