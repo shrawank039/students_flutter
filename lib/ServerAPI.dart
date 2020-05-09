@@ -47,10 +47,10 @@ class ServerAPI {
 
   setAuthUser(data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final userData = json.encode(data['data']);
+    final userData = json.encode(data);
     await prefs.setBool('isLogin', true);
-    await prefs.setString('access_token', data['data']['access_token'].toString());
-    await prefs.setString('api_token', data['data']['api_token'].toString());
+    await prefs.setString('username', data['student_username'].toString());
+    await prefs.setString('password', data['student_tmp_password'].toString());
     await prefs.setString('userData', userData.toString());
   }
 
@@ -63,7 +63,6 @@ class ServerAPI {
   Future<bool> isLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var isLogin = await prefs.getBool('isLogin');
-    print(isLogin);
     if(isLogin == null){
       return false;
     }

@@ -1,14 +1,17 @@
 import 'dart:core';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:students/Utils/Message.dart';
 
 class MyChatScreen extends StatefulWidget {
-  const MyChatScreen({Key key, this.title}) : super(key: key);
-  final String title;
+
+  final String teacher;
+  final String subject;
+  final String chat_group_id;
+  final String calss_id;
+
+  MyChatScreen(this.teacher, this.subject, this.chat_group_id, this.calss_id);
 
   @override
   _MyChatState createState() => _MyChatState();
