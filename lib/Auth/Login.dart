@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:students/Screens/home.dart';
+import 'package:students/Dashboard/Dashboard.dart';
 
 import '../ServerAPI.dart';
 
@@ -20,6 +20,13 @@ class _LoginState extends State<Login> {
   var username = "";
   var password = "";
   int showLoader = 0;
+
+  @override
+  void setState(fn) {
+    // TODO: implement setState
+    super.setState(fn);
+    _isLogin();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +111,13 @@ class _LoginState extends State<Login> {
     );
   }
 
+  _isLogin() async {
+    if(await ServerAPI().isLogin()){
+      Route route = MaterialPageRoute(builder: (context) => Dashboard());
+      Navigator.pushReplacement(context, route);
+    }
+  }
+
   _authCheck() async {
 
     if(username == "") {
@@ -113,6 +127,7 @@ class _LoginState extends State<Login> {
     } else {
 
       try {
+
         final result = await ServerAPI().authRequest({
           "username" : username,
           "password" : password,
@@ -120,7 +135,8 @@ class _LoginState extends State<Login> {
         });
 
         if( result["status"] == "success"){
-          Route route = MaterialPageRoute(builder: (context) => Home());
+          await ServerAPI().setAuthUser(result["data"]);
+          Route route = MaterialPageRoute(builder: (context) => Dashboard());
           Navigator.pushReplacement(context, route);
         } else {
           _scaffolkey.currentState.showSnackBar(ServerAPI.errorToast(result["msg"].toString()));

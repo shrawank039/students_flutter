@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../GroupChat/ChatScreen.dart';
 
-void main() {
-  runApp(Home());
-}
-
-class Home extends StatelessWidget {
+class Dashboard extends StatelessWidget {
   final androidVersionNames = [
     'Schedule',
     'Progress',
@@ -34,8 +31,7 @@ class Home extends StatelessWidget {
         body: Container(
           child: GridView.builder(
             itemCount: carIcons.length,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 margin: EdgeInsets.all(15.0),
@@ -43,6 +39,11 @@ class Home extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       showToast('Position: $index');
+                      // Go to chat page
+                      if(index == 3 ){
+                        Route route = MaterialPageRoute(builder: (context) => MyChatScreen("1", "English", "my_group_id", "2"));
+                        Navigator.pushReplacement(context, route);
+                      }
                     },
                     child: Row(
                       children: <Widget>[
