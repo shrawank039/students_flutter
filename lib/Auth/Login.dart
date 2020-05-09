@@ -22,9 +22,9 @@ class _LoginState extends State<Login> {
   int showLoader = 0;
 
   @override
-  void setState(fn) {
-    // TODO: implement setState
-    super.setState(fn);
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     _isLogin();
   }
 
@@ -113,8 +113,11 @@ class _LoginState extends State<Login> {
 
   _isLogin() async {
     if(await ServerAPI().isLogin()){
+      print("login");
       Route route = MaterialPageRoute(builder: (context) => Dashboard());
       Navigator.pushReplacement(context, route);
+    } else {
+      print("not login");
     }
   }
 
