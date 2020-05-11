@@ -17,9 +17,9 @@ class _TabIndexState extends State<TabIndex> {
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.supervised_user_circle), text: "Group",),
-              Tab(icon: Icon(Icons.receipt), text: "Assignment",),
-              Tab(icon: Icon(Icons.account_circle), text: "Teachers",),
+              Tab(text: "Group",),
+              Tab(text: "Assignment",),
+              Tab(text: "Teachers",),
             ],
           ),
           title: Text('Class Communications'),

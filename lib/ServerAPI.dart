@@ -97,10 +97,28 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> individualChatRoomList() async {
+    final response = await http.get(apiRoot+"/individualChatRoomList?school_id=2&class_id=1&student_id=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
   // Chat
 
   Future<Map<String, dynamic>> getGroupChatHistory(groupId) async {
     final response = await http.get(apiRoot+"/groupChatHistory?group_chat_id="+groupId, headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> getIndividualChatHistory(groupId) async {
+    final response = await http.get(apiRoot+"/individualChatHistory?group_chat_id="+groupId, headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
