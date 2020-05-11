@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class ServerAPI {
 
   var status;
@@ -87,6 +86,39 @@ class ServerAPI {
     } else {
       throw Exception('Failed to load post');
     }
+  }
+
+  Future<Map<String, dynamic>> todaySchedule() async {
+    final response = await http.get(apiRoot+"/getparticularClassData?class_id=1&school_id=2", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  // Chat
+
+  Future<Map<String, dynamic>> getGroupChatHistory(groupId) async {
+    final response = await http.get(apiRoot+"/groupChatHistory?group_chat_id="+groupId, headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  attachmentUpload(image) async {
+    var url = apiRoot+"/upload";
+    var request = http.MultipartRequest('POST', Uri.parse(url),);
+    request.files.add(await http.MultipartFile.fromPath('attachment', image,),);
+    final Map <String ,String> header= {
+      'Accept': 'application/json',
+    };
+    request.headers.addAll(header);
+    var res = await request.send();
+    var response = await http.Response.fromStream(res);
+    return json.decode(response.body.toString());
   }
 
 }

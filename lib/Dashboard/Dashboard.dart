@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../GroupChat/ChatScreen.dart';
+import '../Fragments/TabIndex.dart';
 
 class Dashboard extends StatelessWidget {
   final androidVersionNames = [
@@ -42,7 +43,8 @@ class Dashboard extends StatelessWidget {
                       showToast('Position: $index');
                       // Go to chat page
                       if(index == 3 ){
-                        Route route = MaterialPageRoute(builder: (context) => MyChatScreen("1", "English", "my_group_id", "2"));
+                        //Route route = MaterialPageRoute(builder: (context) => MyChatScreen("2", "2", "bdfterhaladkdsfhsfksdhjf", "2"));
+                        Route route = MaterialPageRoute(builder: (context) => TabIndex());
                         Navigator.push(context, route);
                       }
                     },
