@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Assignment.dart';
 import 'GroupChat.dart';
-import 'Privatechat.dart';
 import 'TeachersList.dart';
 
 class TabIndex extends StatefulWidget {
@@ -17,7 +17,7 @@ class _TabIndexState extends State<TabIndex> {
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(text: "Group",),
+              Tab(text: "Class",),
               Tab(text: "Assignment",),
               Tab(text: "Teachers",),
             ],
@@ -27,7 +27,7 @@ class _TabIndexState extends State<TabIndex> {
         body: TabBarView(
           children: [
             GroupChat(),
-            Privatechat(),
+            Assignment(),
             TeachersList(),
           ],
         ),

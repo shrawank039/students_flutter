@@ -139,4 +139,36 @@ class ServerAPI {
     return json.decode(response.body.toString());
   }
 
+  Future<Map<String, dynamic>> getClassWiseSubjectList() async {
+    final response = await http.get(apiRoot+"/classWiseSubjectList?class_id=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> getIndividualAssignment(studentID, subjectId) async {
+    final response = await http.get(apiRoot+"/getIndividualAssignment?student_id="+studentID+"&subject_id="+subjectId, headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  submitAssignment(data, attachmentPath) async {
+    var url = apiRoot+"/submitWorkAssignmentByStudent";
+    var request = http.MultipartRequest('POST', Uri.parse(url),);
+    request.files.add(await http.MultipartFile.fromPath('attachment', attachmentPath,),);
+    request.fields.addAll(data);
+    final Map <String ,String> header= {
+      'Accept': 'application/json',
+    };
+    request.headers.addAll(header);
+    var res = await request.send();
+    var response = await http.Response.fromStream(res);
+    return json.decode(response.body.toString());
+  }
+
 }
