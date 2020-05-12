@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../Fragments/TabIndex.dart';
 import '../Schedule/Schedule.dart';
 import '../Announcement/Announcement.dart';
+import '../Fragments/TeachersList.dart';
 
 class Dashboard extends StatelessWidget {
   final androidVersionNames = [
@@ -54,6 +54,11 @@ class Dashboard extends StatelessWidget {
 
                       if(index == 2 ){
                         Route route = MaterialPageRoute(builder: (context) => Announcement());
+                        Navigator.push(context, route);
+                      }
+
+                      if(index == 4 ){
+                        Route route = MaterialPageRoute(builder: (context) => TeachersList("Get Support From Teachers"));
                         Navigator.push(context, route);
                       }
 

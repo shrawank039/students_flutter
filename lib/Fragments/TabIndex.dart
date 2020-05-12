@@ -28,7 +28,7 @@ class _TabIndexState extends State<TabIndex> {
           children: [
             GroupChat(),
             Assignment(),
-            TeachersList(),
+            TeachersList(""),
           ],
         ),
       ),

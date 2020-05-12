@@ -50,6 +50,7 @@ class _ScheduleState extends State<Schedule> {
                                       children: <Widget>[
                                         ListTile(
                                           title: Text(classList[subIndex]['subject_name'].toString()),
+                                          subtitle: Text(classList[subIndex]['teacher_name'].toString()),
                                           trailing: Text(classList[subIndex]['timeslot'].toString()),
                                         ),
                                       ],
