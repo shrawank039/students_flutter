@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:students/IndividualChat/IndividualChat.dart';
-
 import '../ServerAPI.dart';
 
 class TeachersList extends StatelessWidget {

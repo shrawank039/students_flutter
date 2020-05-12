@@ -97,6 +97,25 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> weeklyScheduleClass() async {
+    final response = await http.get(apiRoot+"/weeklyScheduleClass?class_id=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> announcement() async {
+    final response = await http.get(apiRoot+"/announcement?type=teacher&school_id=2", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+
   Future<Map<String, dynamic>> individualChatRoomList() async {
     final response = await http.get(apiRoot+"/individualChatRoomList?school_id=2&class_id=1&student_id=1", headers: _buildHeader());
     if (response.statusCode == 200) {
