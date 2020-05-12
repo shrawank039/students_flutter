@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../GroupChat/ChatScreen.dart';
+import '../Fragments/TabIndex.dart';
+import '../Schedule/Schedule.dart';
+import '../Announcement/Announcement.dart';
+import '../Fragments/TeachersList.dart';
 
 class Dashboard extends StatelessWidget {
   final androidVersionNames = [
@@ -39,12 +41,27 @@ class Dashboard extends StatelessWidget {
                 child: Card(
                   child: GestureDetector(
                     onTap: () {
-                      showToast('Position: $index');
-                      // Go to chat page
+
                       if(index == 3 ){
-                        Route route = MaterialPageRoute(builder: (context) => MyChatScreen("1", "English", "my_group_id", "2"));
+                        Route route = MaterialPageRoute(builder: (context) => TabIndex());
                         Navigator.push(context, route);
                       }
+
+                      if(index == 0 ){
+                        Route route = MaterialPageRoute(builder: (context) => Schedule());
+                        Navigator.push(context, route);
+                      }
+
+                      if(index == 2 ){
+                        Route route = MaterialPageRoute(builder: (context) => Announcement());
+                        Navigator.push(context, route);
+                      }
+
+                      if(index == 4 ){
+                        Route route = MaterialPageRoute(builder: (context) => TeachersList("Get Support From Teachers"));
+                        Navigator.push(context, route);
+                      }
+
                     },
                     child: Row(
                       children: <Widget>[
@@ -83,14 +100,4 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  void showToast(message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
 }

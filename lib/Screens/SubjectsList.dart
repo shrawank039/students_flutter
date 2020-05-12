@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:students/Fragments/GroupChat.dart';
-import 'package:students/Fragments/Privatechat.dart';
+import 'package:students/Fragments/Assignment.dart';
 import 'package:students/Fragments/TeachersList.dart';
 
 void main() {
@@ -21,8 +21,8 @@ class SubjectsList extends StatelessWidget {
 class TabsApp extends StatelessWidget {
   List<Widget> containers = [
     new GroupChat(),
-    new Privatechat(),
-    new TeachersList()
+    new Assignment(),
+    new TeachersList("")
   ];
 
   @override

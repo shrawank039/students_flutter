@@ -1,93 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:students/IndividualChat/IndividualChat.dart';
+import '../ServerAPI.dart';
 
-class TeachersList extends StatelessWidget {
-  final teacherSpecialization = [
-    '(Science)',
-    '(English)',
-    '(Mathematics)',
-    '(English)',
-    '(Health & Education)',
-    '(Physical Education)',
-    '(Mathematics)'
-  ];
+class TeachersList extends StatefulWidget {
+  final String title;
 
-  final teacherName = [
-    'Shiv Kumar',
-    'Ram',
-    'Shyam',
-    'Ghanshyam',
-    'Sita',
-    'Gita',
-    'Babita'
-  ];
+  TeachersList(this.title);
+
+  @override
+  _TeachersListState createState() => _TeachersListState();
+}
+
+class _TeachersListState extends State<TeachersList> {
+
+  var appBar = null;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if( widget.title != "") {
+      appBar = AppBar(
+        title: Text(widget.title.toString()),
+      );
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: teacherName.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int position) {
-        return Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10, top: 5),
-          child: GestureDetector(
-            onTap: () {
-              showToast('Position: $position');
-            },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
+    return Scaffold(
+      appBar: appBar,
+      body: FutureBuilder(
+        future: _individualChatRoomList(),
+        builder: ( BuildContext context, snapshot ){
+          var response = snapshot.data;
+          if(response != null){
+            return ListView.builder(
+              itemCount: response.length,
+              itemBuilder: (BuildContext context, int index){
+                return Column(
                   children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(right: 15.0),
-                      height: 40,
-                      width: 40,
-                      child: Image.asset(
-                        'assets/images/teacher_icon.png',
-                      ),
+                    ListTile(
+                      onTap: () async {
+                        Route route = MaterialPageRoute(builder: (context) => IndividualChat(
+                            response[index]['class_id'].toString(),
+                            response[index]['teacher_id'].toString(),
+                            response[index]['subject_name'].toString(),
+                            response[index]['student_id'].toString(),
+                            response[index]['chat_room_id'].toString()
+                        ));
+                        await Navigator.push(context, route);
+                      },
+                      leading: Image.asset('assets/images/teacher_icon.png',),
+                      title: Text(response[index]['teacher_name'].toString(), style: TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Text(response[index]['subject_name'].toString()),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          teacherName[position],
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            teacherSpecialization[position],
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    Container(height: 1,width: MediaQuery.of(context).size.width, decoration: BoxDecoration(color: Colors.black12),)
                   ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+                );
+              });
+          } else {
+            return Center(child: Text("Loading....", style: TextStyle(fontSize: 20),));
+          }
+        },
+      ),
     );
   }
 
-  void showToast(message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+  _individualChatRoomList() async {
+    final result = await ServerAPI().individualChatRoomList();
+    return result["data"];
   }
 }

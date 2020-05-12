@@ -10,22 +10,21 @@ import '../ServerAPI.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:image_picker/image_picker.dart';
 
-class MyChatScreen extends StatefulWidget {
+class IndividualChat extends StatefulWidget {
 
   final String teacher;
   final String subject;
   final String chat_group_id;
   final String calss_id;
-  final String class_status;
   final String student_id;
 
-  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject, this.student_id, this.chat_group_id);
+  IndividualChat(this.calss_id, this.teacher, this.subject, this.student_id, this.chat_group_id);
 
   @override
-  _MyChatState createState() =>  _MyChatState();
+  _IndividualChatState createState() =>  _IndividualChatState();
 }
 
-class _MyChatState extends State<MyChatScreen> {
+class _IndividualChatState extends State<IndividualChat> {
 
   var currentUser;
   List chatHistory = [];
@@ -71,7 +70,7 @@ class _MyChatState extends State<MyChatScreen> {
     socket.onConnectTimeout(print);
     socket.onError(print);
     socket.onDisconnect(print);
-    socket.on("group_chat_room/$chatRoomID", _onReceiveChatMessage);
+    socket.on("individual_chat_room/$chatRoomID", _onReceiveChatMessage);
     socket.connect();
   }
 
@@ -254,7 +253,7 @@ class _MyChatState extends State<MyChatScreen> {
         "created_date" : _getDate()
       };
       //String jsonData = json.encode(msg);
-      socket.emit("group_chat_room", [msg]);
+      socket.emit("individual_chat_room", [msg]);
       // Clear Text field
       _textController.text = "";
       setState(() {
@@ -273,12 +272,9 @@ class _MyChatState extends State<MyChatScreen> {
   }
 
   getGroupChatHistory(chatRoomID) async {
-    print(chatRoomID);
-    final result = await ServerAPI().getGroupChatHistory(chatRoomID);
-    print(result);
+    final result = await ServerAPI().getIndividualChatHistory(chatRoomID);
     if(result['status'] != "failure"){
       final data = result["data"];
-      print(data);
       for(var i = 0; i < data.length; i++){
         chatHistory.add(data[i]);
       }
@@ -305,7 +301,7 @@ class _MyChatState extends State<MyChatScreen> {
         "content" : response['data']['attachmentUrl'],
         "created_date" : _getDate()
       };
-      socket.emit("group_chat_room", [msg]);
+      socket.emit("individual_chat_room", [msg]);
       _textController.text = "";
       setState(() {
         chatHistory.add(msg);
