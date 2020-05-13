@@ -17,9 +17,9 @@ class _TabIndexState extends State<TabIndex> {
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(text: "Class",),
+              Tab(text: "Class Room",),
               Tab(text: "Assignment",),
-              Tab(text: "Teachers",),
+              Tab(text: "Homework",),
             ],
           ),
           title: Text('Class Communications'),
