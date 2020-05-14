@@ -176,6 +176,15 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> submitAttendence() async {
+    final response = await http.get(apiRoot+"/submitAttendence?student_id=9&school_id=4", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
   submitAssignment(data, attachmentPath) async {
     var url = apiRoot+"/submitWorkAssignmentByStudent";
     var request = http.MultipartRequest('POST', Uri.parse(url),);

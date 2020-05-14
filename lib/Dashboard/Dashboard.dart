@@ -10,7 +10,7 @@ class Dashboard extends StatelessWidget {
     'Schedule',
     'Progress',
     'Announcement',
-    'Chat',
+    'Class Room',
     'Support',
     'Profile'
   ];
