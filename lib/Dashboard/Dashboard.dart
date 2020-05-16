@@ -4,8 +4,16 @@ import '../Fragments/TabIndex.dart';
 import '../Schedule/Schedule.dart';
 import '../Announcement/Announcement.dart';
 import '../Fragments/TeachersList.dart';
+import '../ServerAPI.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
+
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+
   final androidVersionNames = [
     'Schedule',
     'Progress',
@@ -14,6 +22,7 @@ class Dashboard extends StatelessWidget {
     'Support',
     'Profile'
   ];
+
   final carIcons = [
     'assets/images/schedule.png',
     'assets/images/progress.png',
@@ -22,6 +31,18 @@ class Dashboard extends StatelessWidget {
     'assets/images/suppoert0.png',
     'assets/images/profile.png'
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    testStorage();
+  }
+
+  testStorage() async {
+    final result = await ServerAPI().getUserInfo();
+    print(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,5 +120,4 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
-
 }
