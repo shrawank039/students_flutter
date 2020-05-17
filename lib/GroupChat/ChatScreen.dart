@@ -262,21 +262,23 @@ class _MyChatState extends State<MyChatScreen> {
   _sendChatMessage() async{
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
-      var msg = {
-        "room_id" :widget.chat_group_id.toString(),
-        "student" : 'student',
-        "send_by" : user['id'].toString(),
-        "content_type" : "text",
-        "content" : _textController.text.toString(),
-        "created_date" : _getDate()
-      };
-      //String jsonData = json.encode(msg);
-      socket.emit("group_chat_room", [msg]);
-      // Clear Text field
-      _textController.text = "";
-      setState(() {
-        chatHistory.insert(0, msg);
-      });
+      if(_textController.text.toString() == ""){
+        var msg = {
+          "room_id" :widget.chat_group_id.toString(),
+          "student" : 'student',
+          "send_by" : user['id'].toString(),
+          "content_type" : "text",
+          "content" : _textController.text.toString(),
+          "created_date" : _getDate()
+        };
+        //String jsonData = json.encode(msg);
+        socket.emit("group_chat_room", [msg]);
+        // Clear Text field
+        _textController.text = "";
+        setState(() {
+          chatHistory.insert(0, msg);
+        });
+      }
     }
   }
 
