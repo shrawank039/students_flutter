@@ -46,7 +46,6 @@ class _MyChatState extends State<MyChatScreen> {
         isActive = true;
       });
     }
-
   }
 
   getCurrentUser() async {
@@ -209,7 +208,7 @@ class _MyChatState extends State<MyChatScreen> {
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 2),
-                      child: Text("2020-05-11",style: TextStyle(fontSize: 12,color: Colors.grey), textAlign: TextAlign.right,),
+                      child: Text(data['created_date'].toString(),style: TextStyle(fontSize: 12,color: Colors.grey), textAlign: TextAlign.right,),
                     ),
                   ),
                 ],
@@ -276,7 +275,7 @@ class _MyChatState extends State<MyChatScreen> {
       // Clear Text field
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }
@@ -285,13 +284,12 @@ class _MyChatState extends State<MyChatScreen> {
     print("_onReceiveChatMessage");
     var jsonMessage = json.decode(message.toString());
     setState(() {
-      chatHistory.add(jsonMessage["content"]);
+      chatHistory.insert(0, jsonMessage["content"]);
     });
     print(chatHistory);
   }
 
   getGroupChatHistory(chatRoomID) async {
-    print(chatRoomID);
     final result = await ServerAPI().getGroupChatHistory(chatRoomID);
     print(result);
     if(result['status'] != "failure"){

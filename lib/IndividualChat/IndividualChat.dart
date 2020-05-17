@@ -257,7 +257,7 @@ class _IndividualChatState extends State<IndividualChat> {
       // Clear Text field
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }
@@ -266,7 +266,7 @@ class _IndividualChatState extends State<IndividualChat> {
     print("_onReceiveChatMessage");
     var jsonMessage = json.decode(message.toString());
     setState(() {
-      chatHistory.add(jsonMessage["content"]);
+      chatHistory.insert(0, jsonMessage["content"]);
     });
     print(chatHistory);
   }
@@ -304,7 +304,7 @@ class _IndividualChatState extends State<IndividualChat> {
       socket.emit("individual_chat_room", [msg]);
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }
