@@ -244,21 +244,23 @@ class _IndividualChatState extends State<IndividualChat> {
   _sendChatMessage() async{
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
-      var msg = {
-        "room_id" :widget.chat_group_id.toString(),
-        "student" : 'student',
-        "send_by" : user['id'].toString(),
-        "content_type" : "text",
-        "content" : _textController.text.toString(),
-        "created_date" : _getDate()
-      };
-      //String jsonData = json.encode(msg);
-      socket.emit("individual_chat_room", [msg]);
-      // Clear Text field
-      _textController.text = "";
-      setState(() {
-        chatHistory.add(msg);
-      });
+      if(_textController.text.toString() != ""){
+        var msg = {
+          "room_id" :widget.chat_group_id.toString(),
+          "student" : 'student',
+          "send_by" : user['id'].toString(),
+          "content_type" : "text",
+          "content" : _textController.text.toString(),
+          "created_date" : _getDate()
+        };
+        //String jsonData = json.encode(msg);
+        socket.emit("individual_chat_room", [msg]);
+        // Clear Text field
+        _textController.text = "";
+        setState(() {
+          chatHistory.insert(0, msg);
+        });
+      }
     }
   }
 
@@ -266,7 +268,7 @@ class _IndividualChatState extends State<IndividualChat> {
     print("_onReceiveChatMessage");
     var jsonMessage = json.decode(message.toString());
     setState(() {
-      chatHistory.add(jsonMessage["content"]);
+      chatHistory.insert(0, jsonMessage["content"]);
     });
     print(chatHistory);
   }
@@ -304,7 +306,7 @@ class _IndividualChatState extends State<IndividualChat> {
       socket.emit("individual_chat_room", [msg]);
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }

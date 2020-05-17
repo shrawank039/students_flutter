@@ -152,7 +152,7 @@ class _GroupChatState extends State<GroupChat> {
                       Container(
                         height: 25,
                         width: 25,
-                        child: getStatus(response[index]['class_status']),
+                        child: getStatus(response[index]['class_status'].toString()),
                       ),
                     ],
                   ),
@@ -179,12 +179,13 @@ class _GroupChatState extends State<GroupChat> {
 
   allSubjectList() async {
     final result = await ServerAPI().getClassWiseSubjectList();
-    allSubject =  result["data"];
+    setState(() {
+      allSubject =  result["data"];
+    });
   }
 
   todaySchedule() async{
     final result = await ServerAPI().todaySchedule();
-    print(result);
     return result["data"];
   }
 }
