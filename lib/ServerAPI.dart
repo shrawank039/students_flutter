@@ -59,6 +59,14 @@ class ServerAPI {
     return json.decode(data);
   }
 
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     await prefs.remove('isLogin');
+     await prefs.remove('username');
+     await prefs.remove('password');
+     await prefs.remove('userData');
+  }
+
   Future<bool> isLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var isLogin = await prefs.getBool('isLogin');
@@ -89,7 +97,10 @@ class ServerAPI {
   }
 
   Future<Map<String, dynamic>> todaySchedule() async {
-    final response = await http.get(apiRoot+"/getparticularClassData?class_id=1&school_id=2", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final classID = userInfo['class_id'];
+    final schoolID = userInfo['school_id'];
+    final response = await http.get(apiRoot+"/getparticularClassData?class_id=$classID&school_id=$schoolID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -98,7 +109,9 @@ class ServerAPI {
   }
 
   Future<Map<String, dynamic>> weeklyScheduleClass() async {
-    final response = await http.get(apiRoot+"/weeklyScheduleClass?class_id=1", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final classID = userInfo['class_id'];
+    final response = await http.get(apiRoot+"/weeklyScheduleClass?class_id=$classID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -107,7 +120,9 @@ class ServerAPI {
   }
 
   Future<Map<String, dynamic>> announcement() async {
-    final response = await http.get(apiRoot+"/announcement?type=teacher&school_id=2", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final schoolID = userInfo['school_id'];
+    final response = await http.get(apiRoot+"/announcement?type=teacher&school_id=$schoolID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -117,7 +132,11 @@ class ServerAPI {
 
 
   Future<Map<String, dynamic>> individualChatRoomList() async {
-    final response = await http.get(apiRoot+"/individualChatRoomList?school_id=2&class_id=1&student_id=1", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final classID = userInfo['class_id'];
+    final schoolID = userInfo['school_id'];
+    final studentID = userInfo['id'];
+    final response = await http.get(apiRoot+"/individualChatRoomList?school_id=$schoolID&class_id=$classID&student_id=$studentID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -159,7 +178,9 @@ class ServerAPI {
   }
 
   Future<Map<String, dynamic>> getClassWiseSubjectList() async {
-    final response = await http.get(apiRoot+"/classWiseSubjectList?class_id=1", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final classID = userInfo['class_id'];
+    final response = await http.get(apiRoot+"/classWiseSubjectList?class_id=$classID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -177,7 +198,10 @@ class ServerAPI {
   }
 
   Future<Map<String, dynamic>> submitAttendence() async {
-    final response = await http.get(apiRoot+"/submitAttendence?student_id=9&school_id=4", headers: _buildHeader());
+    final userInfo = await this.getUserInfo();
+    final studentID = userInfo['id'];
+    final schoolID = userInfo['school_id'];
+    final response = await http.get(apiRoot+"/submitAttendence?student_id=$studentID&school_id=$schoolID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -197,6 +221,27 @@ class ServerAPI {
     var res = await request.send();
     var response = await http.Response.fromStream(res);
     return json.decode(response.body.toString());
+  }
+
+  Future<Map<String, dynamic>> getProfile() async {
+    final userInfo = await this.getUserInfo();
+    final response = await http.post(apiRoot+"/getStudentDeviceId", headers: _buildHeader(), body: {"student_id" : userInfo['id']});
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> addSupport() async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final response = await http.get(apiRoot+"/addSupport?student_id=$userID&status=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
   }
 
 }

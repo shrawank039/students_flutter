@@ -32,6 +32,7 @@ class _MyChatState extends State<MyChatScreen> {
   SocketIOManager manager;
   final _textController = TextEditingController();
   SocketIO socket;
+  bool isActive = false;
 
   @override
   void initState() {
@@ -39,6 +40,13 @@ class _MyChatState extends State<MyChatScreen> {
     getCurrentUser();
     manager = SocketIOManager();
     initSocket();
+
+    if(int.tryParse(widget.class_status) == 1){
+      setState(() {
+        isActive = true;
+      });
+    }
+
   }
 
   getCurrentUser() async {
@@ -121,42 +129,52 @@ class _MyChatState extends State<MyChatScreen> {
                   ),
                 ),
                 Divider(height: 1.0),
-                Container(
-                    decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                    child:  IconTheme(
-                        data:  IconThemeData(color: Theme.of(context).accentColor),
-                        child:  Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child:  Row(
-                            children: <Widget>[
-
-                              //Enter Text message here
-                              Flexible(
-                                child:  TextField(
-                                  controller: _textController,
-                                  decoration:  InputDecoration.collapsed(hintText: "Enter message"),
-                                ),
-                              ),
-
-                              //right send button
-
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 2.0),
-                                width: 48.0,
-                                height: 48.0,
-                                child:  IconButton(
-                                    icon: Image.asset("assets/images/send_out.png"),
-                                    onPressed: _sendChatMessage
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ))),
+                chatInput(),
               ],
             )
         )
     );
+  }
+
+  Widget chatInput(){
+    if(isActive){
+      return Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child:  IconTheme(
+              data:  IconThemeData(color: Theme.of(context).accentColor),
+              child:  Container(
+                margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                child:  Row(
+                  children: <Widget>[
+
+                    //Enter Text message here
+                    Flexible(
+                      child:  TextField(
+                        controller: _textController,
+                        decoration:  InputDecoration.collapsed(hintText: "Enter message"),
+                      ),
+                    ),
+
+                    //right send button
+
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 2.0),
+                      width: 48.0,
+                      height: 48.0,
+                      child:  IconButton(
+                          icon: Image.asset("assets/images/send_out.png"),
+                          onPressed: _sendChatMessage
+                      ),
+                    ),
+
+                  ],
+                ),
+              )
+          )
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget chatList(data){

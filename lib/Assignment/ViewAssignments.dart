@@ -62,8 +62,6 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
                                     icon: Icon(Icons.file_download),
                                     label: Text("Download")
                                 ),
-                                Spacer(),
-                                assignmentWidget(response[index]),
                               ],
                             ),
                           )
