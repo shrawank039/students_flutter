@@ -45,6 +45,7 @@ class Assignment extends StatelessWidget {
 
   _getClassWiseSubjectList() async {
     final result = await ServerAPI().getClassWiseSubjectList();
+    print(result);
     return result["data"];
   }
 

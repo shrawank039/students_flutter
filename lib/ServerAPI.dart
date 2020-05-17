@@ -59,6 +59,14 @@ class ServerAPI {
     return json.decode(data);
   }
 
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     await prefs.remove('isLogin');
+     await prefs.remove('username');
+     await prefs.remove('password');
+     await prefs.remove('userData');
+  }
+
   Future<bool> isLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var isLogin = await prefs.getBool('isLogin');
@@ -213,6 +221,27 @@ class ServerAPI {
     var res = await request.send();
     var response = await http.Response.fromStream(res);
     return json.decode(response.body.toString());
+  }
+
+  Future<Map<String, dynamic>> getProfile() async {
+    final userInfo = await this.getUserInfo();
+    final response = await http.post(apiRoot+"/getStudentDeviceId", headers: _buildHeader(), body: {"student_id" : userInfo['id']});
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> addSupport() async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final response = await http.get(apiRoot+"/addSupport?student_id=$userID&status=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
   }
 
 }

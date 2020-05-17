@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:students/Screens/ContactAgreement.dart';
 import '../Fragments/TabIndex.dart';
 import '../Schedule/Schedule.dart';
 import '../Announcement/Announcement.dart';
 import '../Fragments/TeachersList.dart';
 import '../ServerAPI.dart';
+import '../Profile/Profile.dart';
 
 class Dashboard extends StatefulWidget {
 
@@ -79,7 +81,11 @@ class _DashboardState extends State<Dashboard> {
                       }
 
                       if(index == 4 ){
-                        Route route = MaterialPageRoute(builder: (context) => TeachersList("Get Support From Teachers"));
+                        Route route = MaterialPageRoute(builder: (context) => ContactAgreement());
+                        Navigator.push(context, route);
+                      }
+                      if(index == 5 ){
+                        Route route = MaterialPageRoute(builder: (context) => Profile());
                         Navigator.push(context, route);
                       }
 
