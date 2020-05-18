@@ -128,7 +128,6 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
 
   _getIndividualAssignment() async {
     final result = await ServerAPI().getIndividualAssignment(widget.sutdentID, widget.subjectID);
-    print(result);
     return result["data"];
   }
 

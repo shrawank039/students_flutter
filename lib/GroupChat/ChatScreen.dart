@@ -326,7 +326,7 @@ class _MyChatState extends State<MyChatScreen> {
       socket.emit("group_chat_room", [msg]);
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }
