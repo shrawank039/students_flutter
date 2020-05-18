@@ -16,6 +16,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
+  String schoolName = "";
+
   final androidVersionNames = [
     'Schedule',
     'Announcement',
@@ -41,7 +43,9 @@ class _DashboardState extends State<Dashboard> {
 
   testStorage() async {
     final result = await ServerAPI().getUserInfo();
-    print(result);
+    setState(() {
+      schoolName = result['school_name'];
+    });
   }
 
   @override
@@ -52,76 +56,96 @@ class _DashboardState extends State<Dashboard> {
         appBar: AppBar(
           title: Text("Dashboard"),
         ),
-        body: Container(
-          child: GridView.builder(
-            itemCount: carIcons.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: EdgeInsets.all(15.0),
-                child: Card(
-                  child: GestureDetector(
-                    onTap: () {
+        body: Stack(
+          children: <Widget>[
+            Positioned(
+              bottom: 20,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Text(schoolName, style: TextStyle(
+                    fontSize: 18
+                  ),),
+                ),
+              ),
+            ),
+            Container(
+              child: GridView.builder(
+                itemCount: carIcons.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    margin: EdgeInsets.all(15.0),
+                    child: Card(
+                      child: GestureDetector(
+                        onTap: () {
 
-                      if(index == 2 ){
-                        Route route = MaterialPageRoute(builder: (context) => TabIndex());
-                        Navigator.push(context, route);
-                      }
+                          if(index == 2 ){
+                            Route route = MaterialPageRoute(builder: (context) => TabIndex());
+                            Navigator.push(context, route);
+                          }
 
-                      if(index == 0 ){
-                        Route route = MaterialPageRoute(builder: (context) => Schedule());
-                        Navigator.push(context, route);
-                      }
+                          if(index == 0 ){
+                            Route route = MaterialPageRoute(builder: (context) => Schedule());
+                            Navigator.push(context, route);
+                          }
 
-                      if(index == 1 ){
-                        Route route = MaterialPageRoute(builder: (context) => Announcement());
-                        Navigator.push(context, route);
-                      }
+                          if(index == 1 ){
+                            Route route = MaterialPageRoute(builder: (context) => Announcement());
+                            Navigator.push(context, route);
+                          }
 
-                      if(index == 3 ){
-                        Route route = MaterialPageRoute(builder: (context) => ContactAgreement());
-                        Navigator.push(context, route);
-                      }
-                      if(index == 4 ){
-                        Route route = MaterialPageRoute(builder: (context) => Profile());
-                        Navigator.push(context, route);
-                      }
+                          if(index == 3 ){
+                            Route route = MaterialPageRoute(builder: (context) => ContactAgreement());
+                            Navigator.push(context, route);
+                          }
+                          if(index == 4 ){
+                            Route route = MaterialPageRoute(builder: (context) => Profile());
+                            Navigator.push(context, route);
+                          }
 
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        },
+                        child: Row(
                           children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(left: 15, top: 15),
-                              child: Text(
-                                androidVersionNames[index],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(left: 15, top: 15),
+                                  child: Text(
+                                    androidVersionNames[index],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 50, top: 15),
-                              height: 90,
-                              width: 90,
-                              child: Image.asset(
-                                carIcons[index],
-                              ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 50, top: 15),
+                                  height: 90,
+                                  width: 90,
+                                  child: Image.asset(
+                                    carIcons[index],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  _getSchoolName() async {
+
+  }
+
 }

@@ -70,7 +70,11 @@ class _IndividualChatState extends State<IndividualChat> {
     socket.onConnectTimeout(print);
     socket.onError(print);
     socket.onDisconnect(print);
-    socket.on("individual_chat_room/$chatRoomID", _onReceiveChatMessage);
+    socket.on("individual_chat_room/$chatRoomID", (message){
+      setState(() {
+        chatHistory.insert(0, message);
+      });
+    });
     socket.connect();
   }
 
@@ -229,8 +233,7 @@ class _IndividualChatState extends State<IndividualChat> {
                 image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.cover,
-                    colorFilter:
-                    ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                ),
               ),
         ),
         placeholder: (context, url) => CircularProgressIndicator(),

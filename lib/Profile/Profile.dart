@@ -110,7 +110,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
+                              child: Text(response["student_dob"].toString()),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
@@ -123,7 +123,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
+                              child: Text(response["student_gender"].toString()),
                             ),
                           ],
                         ),
@@ -162,7 +162,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
+                              child: Text(response["program"].toString()),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
@@ -175,7 +175,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
+                              child: Text(response["batch"].toString()),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
@@ -188,57 +188,8 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
+                              child: Text(response["class_name"].toString()),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Section',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 3),
-                              child: Text('NA'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(10.0),
-                        child: Text(
-                          'Hostel Details',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 70),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                'Hostel',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Text('Not Applicable'),
                           ],
                         ),
                       ),
@@ -256,7 +207,6 @@ class _ProfileState extends State<Profile> {
 
   getProfile() async{
     final result = await ServerAPI().getProfile();
-    print(result);
     return result['data'];
   }
 

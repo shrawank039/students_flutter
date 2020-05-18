@@ -50,9 +50,7 @@ class _AnnouncementState extends State<Announcement> {
 
   _getAnnouncement() async {
     final result = await ServerAPI().announcement();
-    if(result["data"].length > 0 ){
-      return result["data"];
-    }
+    return result["data"];
   }
 
 }
