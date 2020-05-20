@@ -48,6 +48,7 @@ class _IndividualChatState extends State<IndividualChat> {
   initSocket() async {
     var userId = widget.student_id;
     var chatRoomID = widget.chat_group_id;
+    print(chatRoomID);
     // Load Chat History
     await getGroupChatHistory(chatRoomID);
     socket = await manager.createInstance(SocketOptions(
@@ -70,7 +71,12 @@ class _IndividualChatState extends State<IndividualChat> {
     socket.onConnectTimeout(print);
     socket.onError(print);
     socket.onDisconnect(print);
-    socket.on("individual_chat_room/$chatRoomID", _onReceiveChatMessage);
+    socket.on("individual_chat_room/$chatRoomID", (message){
+      print(message);
+      setState(() {
+        chatHistory.insert(0, message);
+      });
+    });
     socket.connect();
   }
 
@@ -229,8 +235,7 @@ class _IndividualChatState extends State<IndividualChat> {
                 image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.cover,
-                    colorFilter:
-                    ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                ),
               ),
         ),
         placeholder: (context, url) => CircularProgressIndicator(),

@@ -122,7 +122,7 @@ class ServerAPI {
   Future<Map<String, dynamic>> announcement() async {
     final userInfo = await this.getUserInfo();
     final schoolID = userInfo['school_id'];
-    final response = await http.get(apiRoot+"/announcement?type=teacher&school_id=$schoolID", headers: _buildHeader());
+    final response = await http.get(apiRoot+"/announcement?type=student&school_id=$schoolID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {

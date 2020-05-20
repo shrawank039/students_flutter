@@ -30,8 +30,8 @@ class _MyChatState extends State<MyChatScreen> {
   var currentUser;
   List chatHistory = [];
   SocketIOManager manager;
-  final _textController = TextEditingController();
   SocketIO socket;
+  final _textController = TextEditingController();
   bool isActive = false;
 
   @override
@@ -78,7 +78,11 @@ class _MyChatState extends State<MyChatScreen> {
     socket.onConnectTimeout(print);
     socket.onError(print);
     socket.onDisconnect(print);
-    socket.on("group_chat_room/$chatRoomID", _onReceiveChatMessage);
+    socket.on("group_chat_room/$chatRoomID", (message){
+      setState(() {
+        chatHistory.insert(0, message);
+      });
+    });
     socket.connect();
   }
 
@@ -247,8 +251,7 @@ class _MyChatState extends State<MyChatScreen> {
                 image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.cover,
-                    colorFilter:
-                    ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                ),
               ),
         ),
         placeholder: (context, url) => CircularProgressIndicator(),
@@ -262,7 +265,7 @@ class _MyChatState extends State<MyChatScreen> {
   _sendChatMessage() async{
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
-      if(_textController.text.toString() == ""){
+      if(_textController.text.toString() != ""){
         var msg = {
           "room_id" :widget.chat_group_id.toString(),
           "student" : 'student',
@@ -288,15 +291,12 @@ class _MyChatState extends State<MyChatScreen> {
     setState(() {
       chatHistory.insert(0, jsonMessage["content"]);
     });
-    print(chatHistory);
   }
 
   getGroupChatHistory(chatRoomID) async {
     final result = await ServerAPI().getGroupChatHistory(chatRoomID);
-    print(result);
     if(result['status'] != "failure"){
       final data = result["data"];
-      print(data);
       for(var i = 0; i < data.length; i++){
         chatHistory.add(data[i]);
       }
@@ -326,7 +326,7 @@ class _MyChatState extends State<MyChatScreen> {
       socket.emit("group_chat_room", [msg]);
       _textController.text = "";
       setState(() {
-        chatHistory.add(msg);
+        chatHistory.insert(0, msg);
       });
     }
   }
