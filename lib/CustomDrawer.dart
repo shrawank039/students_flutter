@@ -6,6 +6,7 @@ import 'package:students/Dashboard/Dashboard.dart';
 import 'package:students/Profile/Profile.dart';
 import 'Announcement/Announcement.dart';
 import 'Auth/Login.dart';
+import 'Auth/changePassword.dart';
 import 'Fragments/TabIndex.dart';
 import 'Schedule/Schedule.dart';
 import 'Screens/ContactAgreement.dart';
@@ -120,6 +121,14 @@ class _DrawerState extends State<CustomDrawer> {
           ),
 
           Divider(),
+          ListTile(
+            leading: const Icon(Icons.vpn_key),
+            title: Text('Change Password', style: MenuTextStyle,),
+            onTap: () {
+              Route route = MaterialPageRoute(builder: (context) => changePassword());
+              Navigator.pushReplacement(context, route);
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.undo),
             title: Text('Logout', style: MenuTextStyle,),

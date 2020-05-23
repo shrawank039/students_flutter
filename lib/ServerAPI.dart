@@ -292,4 +292,15 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> changePassword(oldPassword, newPassword, confirmPassword) async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final response = await http.get(apiRoot+"/changePassword?user_id=$userID&old_password=$oldPassword&new_password=$newPassword&confirm_password=$confirmPassword", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
 }
