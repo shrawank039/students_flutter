@@ -30,14 +30,13 @@ class _AnnouncementState extends State<Announcement> {
                           ListTile(
                             leading: Icon(Icons.notifications_active),
                             title: Text(response[index]['title'].toString()),
-                            trailing: Text(
-                                response[index]['created_date'].toString()),
+                            subtitle: Text(response[index]['created_date'].toString()),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 10, right: 10, bottom: 10),
                             child:
-                                Text(response[index]['description'].toString()),
+                                Text(response[index]['description'].toString(), textAlign: TextAlign.justify,),
                           ),
                         ],
                       ),
