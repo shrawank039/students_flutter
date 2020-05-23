@@ -5,13 +5,11 @@ import 'package:students/Auth/Login.dart';
 import '../ServerAPI.dart';
 
 class Profile extends StatefulWidget {
-
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -22,6 +20,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueGrey,
         title: Text('Profile'),
         actions: <Widget>[
           IconButton(
@@ -34,11 +33,11 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
-      body : FutureBuilder(
+      body: FutureBuilder(
           future: getProfile(),
-          builder: ( BuildContext context, snapshot ){
+          builder: (BuildContext context, snapshot) {
             var response = snapshot.data;
-            if(response != null){
+            if (response != null) {
               return SingleChildScrollView(
                 child: Container(
                   child: Column(
@@ -56,12 +55,12 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
+                        margin:
+                            EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-
                             Container(
                               child: Text(
                                 "Father's Name",
@@ -74,7 +73,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["father_name"].toString()),
                             ),
-
                             Container(
                               child: Text(
                                 "Mother's Name",
@@ -87,7 +85,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["mother_name"].toString()),
                             ),
-
                             Container(
                               child: Text(
                                 'Student Name',
@@ -100,8 +97,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["student_name"].toString()),
                             ),
-
-
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(
@@ -152,7 +147,8 @@ class _ProfileState extends State<Profile> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 3),
-                              child: Text(response["student_gender"].toString()),
+                              child:
+                                  Text(response["student_gender"].toString()),
                             ),
                           ],
                         ),
@@ -176,7 +172,8 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
+                        margin:
+                            EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,17 +224,19 @@ class _ProfileState extends State<Profile> {
                 ),
               );
             } else {
-              return Center(child: Text("Loading....", style: TextStyle(fontSize: 20),));
+              return Center(
+                  child: Text(
+                "Loading....",
+                style: TextStyle(fontSize: 20),
+              ));
             }
-          }
-      ),
+          }),
     );
   }
 
-  getProfile() async{
+  getProfile() async {
     final result = await ServerAPI().getProfile();
     print(result);
     return result['data'];
   }
-
 }

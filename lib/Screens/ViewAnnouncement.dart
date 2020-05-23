@@ -11,6 +11,7 @@ class ViewAnnouncement extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           title: Text('Announcement'),
         ),
         body: Container(

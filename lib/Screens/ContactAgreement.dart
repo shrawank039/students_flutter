@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../ServerAPI.dart';
 
 class ContactAgreement extends StatelessWidget {
-
   List<String> text = [
     'I have not shared my password with anyone.',
     'I am responsible for the content typed in query.',
@@ -17,6 +16,7 @@ class ContactAgreement extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Contact Agreement'),
+        backgroundColor: Colors.blueGrey,
       ),
       body: Column(
         children: <Widget>[
@@ -25,17 +25,18 @@ class ContactAgreement extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.only(top: 30, bottom: 30.0),
               margin:
-              EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50.0),
+                  EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50.0),
               color: Colors.white,
               child: Column(
                 children: text
-                    .map((t) => CheckboxListTile(
-                    title: Text(t),
-                    value: true,
-                    onChanged: (bool value) {},
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                )
+                    .map(
+                      (t) => CheckboxListTile(
+                        title: Text(t),
+                        value: true,
+                        onChanged: (bool value) {},
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    )
                     .toList(),
               ),
             ),
@@ -68,5 +69,4 @@ class ContactAgreement extends StatelessWidget {
       ),
     );
   }
-
 }

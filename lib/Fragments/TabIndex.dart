@@ -10,7 +10,6 @@ class TabIndex extends StatefulWidget {
 }
 
 class _TabIndexState extends State<TabIndex> {
-
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
 
   @override
@@ -20,21 +19,29 @@ class _TabIndexState extends State<TabIndex> {
       child: Scaffold(
         key: _scaffolkey,
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),
               tooltip: 'Mark Attendence',
               onPressed: () async {
                 final result = await ServerAPI().submitAttendence();
-                _scaffolkey.currentState.showSnackBar(ServerAPI.successToast(result['msg']));
+                _scaffolkey.currentState
+                    .showSnackBar(ServerAPI.successToast(result['msg']));
               },
             ),
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: "Class Room",),
-              Tab(text: "Assignment",),
-              Tab(text: "Homework",),
+              Tab(
+                text: "Class Room",
+              ),
+              Tab(
+                text: "Assignment",
+              ),
+              Tab(
+                text: "Homework",
+              ),
             ],
           ),
           title: Text('Class Communications'),

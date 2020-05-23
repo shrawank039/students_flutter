@@ -11,6 +11,7 @@ class HomeworkSubmit extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           title: Text('Assignment'),
         ),
         body: Container(
