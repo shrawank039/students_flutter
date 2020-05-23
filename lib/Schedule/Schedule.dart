@@ -7,11 +7,14 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
+
+  List subjectList  = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Class Schedule"),
+        title: Text("Time Table"),
         backgroundColor: Colors.blueGrey,
       ),
       body: FutureBuilder(
@@ -23,59 +26,56 @@ class _ScheduleState extends State<Schedule> {
               response.forEach((key, value) {
                 keyName.add(key);
               });
-
-              return ListView.builder(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  itemCount: response.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var classList = response[keyName[index]];
-                    return Card(
-                      child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            leading: Icon(Icons.today),
-                            title: Text(
-                              keyName[index].toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding:
-                                  EdgeInsets.only(left: 10, right: 10, top: 10),
-                              itemCount: classList.length,
-                              itemBuilder:
-                                  (BuildContext context, int subIndex) {
-                                return Column(
-                                  children: <Widget>[
-                                    Container(
-                                      height: 1,
-                                      decoration:
-                                          BoxDecoration(color: Colors.black12),
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        ListTile(
-                                          title: Text(classList[subIndex]
-                                                  ['subject_name']
-                                              .toString()),
-                                          subtitle: Text(classList[subIndex]
-                                                  ['teacher_name']
-                                              .toString()),
-                                          trailing: Text(classList[subIndex]
-                                                  ['timeslot']
-                                              .toString()),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              })
-                        ],
+              return Column(
+                children: <Widget>[
+                  // Dropdown
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10, bottom: 5),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black26),
+                          borderRadius: BorderRadius.all(Radius.circular(5.0))
                       ),
-                    );
-                  });
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: keyName[0],
+                          hint: Text('Select Service Type'),
+                          items: keyName.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.toString(),
+                              child: Text(item.toString()),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              subjectList = response[value];
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                      itemCount: subjectList.length,
+                      itemBuilder: (BuildContext context, int subIndex) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(subjectList[subIndex]['subject_name'].toString(), style: TextStyle(fontSize: 22, color: Colors.blueAccent),),
+                            subtitle: Text(subjectList[subIndex]['teacher_name'].toString(), style: TextStyle(fontSize: 18),),
+                            trailing: Text("Time : \n"+ subjectList[subIndex]['timeslot'].toString(), style: TextStyle(fontSize: 20)),
+                          ),
+                        );
+                      }),
+                ],
+              );
+
             } else {
               return Center(
                   child: Text(
@@ -87,8 +87,22 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
+  _serStart(){
+
+  }
+
   _weeklyScheduleClass() async {
     final result = await ServerAPI().weeklyScheduleClass();
+
+    var keyName = [];
+    result['data'].forEach((key, value) {
+      keyName.add(key);
+    });
+
+    setState(() {
+      subjectList = result['data'][keyName[0]];
+    });
+
     return result['data'];
   }
 }

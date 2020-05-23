@@ -85,7 +85,7 @@ class _DrawerState extends State<CustomDrawer> {
 
           ListTile(
             leading: const Icon(Icons.calendar_today),
-            title: Text('Schedule', style: MenuTextStyle,),
+            title: Text('Time Table', style: MenuTextStyle,),
             onTap: () {
               Route route = MaterialPageRoute(builder: (context) => Schedule());
               Navigator.pushReplacement(context, route);

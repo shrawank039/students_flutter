@@ -22,11 +22,12 @@ class _DashboardState extends State<Dashboard> {
   String studentCode = "";
 
   final androidVersionNames = [
-    'Schedule',
+    'Time Table',
     'Announcement',
     'Class Room',
     'Support',
     'Profile',
+    'Attandance'
   ];
 
   final carIcons = [
@@ -34,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
     'assets/images/announcement.png',
     'assets/images/chat.png',
     'assets/images/suppoert0.png',
+    'assets/images/profile.png',
     'assets/images/profile.png',
   ];
 
@@ -43,6 +45,7 @@ class _DashboardState extends State<Dashboard> {
     Colors.orange[300],
     Colors.purple[200],
     Colors.green[300],
+    Colors.purple[300],
   ];
 
   @override
@@ -79,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    child: Image.asset('assets/images/school_banner.png', fit: BoxFit.fill,),
+                    child: Image.asset('assets/images/school_banner.png', fit: BoxFit.fill),
                     height: 190.0,
                     width: MediaQuery.of(context).size.width,
                   ),
