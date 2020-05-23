@@ -15,9 +15,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
   String schoolName = "";
   String studentName = "";
   String schoolLogo = "";
+  String studentCode = "";
 
   final androidVersionNames = [
     'Schedule',
@@ -55,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       if (result['school_name'] != null) schoolName = result['school_name'];
       if (result['student_name'] != null) studentName = result['student_name'];
+      if (result['student_code'] != null) studentCode = result['student_code'];
     });
   }
 
@@ -76,8 +79,9 @@ class _DashboardState extends State<Dashboard> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    child: Image.asset('assets/images/school_banner.png'),
+                    child: Image.asset('assets/images/school_banner.png', fit: BoxFit.fill,),
                     height: 190.0,
+                    width: MediaQuery.of(context).size.width,
                   ),
                   Container(
                     width: double.infinity,
@@ -90,9 +94,9 @@ class _DashboardState extends State<Dashboard> {
                           height: 70.0,
                           decoration: new BoxDecoration(
                             shape: BoxShape.circle,
-                            image: new DecorationImage(
+                            image: DecorationImage(
                               fit: BoxFit.fill,
-                              image: new NetworkImage(
+                              image: NetworkImage(
                                   'https://f0.pngfuel.com/png/382/222/delhi-public-school-faridabad-modern-delhi-public-school-delhi-public-school-society-national-secondary-school-others-png-clip-art.png'),
                             ),
                           ),
@@ -100,6 +104,16 @@ class _DashboardState extends State<Dashboard> {
                         Container(
                           child: Text(
                             studentName.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            studentCode.toUpperCase(),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
