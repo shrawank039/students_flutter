@@ -258,4 +258,13 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> readAllMessage(chatRoomID) async {
+    final response = await http.get(apiRoot+"/setReadMessage?room_id=$chatRoomID&sender=student", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
 }

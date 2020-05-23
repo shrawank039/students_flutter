@@ -43,14 +43,14 @@ class _TeachersListState extends State<TeachersList> {
                     children: <Widget>[
                       ListTile(
                         onTap: () async {
-                          Route route = MaterialPageRoute(
-                              builder: (context) => IndividualChat(
+                          Route route = MaterialPageRoute(builder: (context) => IndividualChat(
                                   response[index]['class_id'].toString(),
                                   response[index]['teacher_id'].toString(),
                                   response[index]['subject_name'].toString(),
                                   response[index]['student_id'].toString(),
                                   response[index]['chat_room_id'].toString()));
                           await Navigator.push(context, route);
+                          setState(() {});
                         },
                         leading: Image.asset(
                           'assets/images/teacher_icon.png',
@@ -59,8 +59,8 @@ class _TeachersListState extends State<TeachersList> {
                           response[index]['teacher_name'].toString(),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle:
-                            Text(response[index]['subject_name'].toString()),
+                        subtitle: Text(response[index]['subject_name'].toString()),
+                        trailing: customCountViewer(response[index]['unread_message']),
                       ),
                       Container(
                         height: 1,
@@ -80,6 +80,21 @@ class _TeachersListState extends State<TeachersList> {
         },
       ),
     );
+  }
+
+  Widget customCountViewer(count){
+    if(count > 0 ){
+      return Container(
+        width: 30,
+        height: 30,
+        child: CircleAvatar(
+          backgroundColor: Colors.green,
+          child: Text(count.toString(), style: TextStyle(color: Colors.white),),
+        ),
+      );
+    } else {
+      return Container(width: 30, height: 30,);
+    }
   }
 
   _individualChatRoomList() async {

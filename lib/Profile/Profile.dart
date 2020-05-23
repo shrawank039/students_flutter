@@ -63,6 +63,18 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             Container(
                               child: Text(
+                                'Student Name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 3),
+                              child: Text(response["student_name"].toString()),
+                            ),
+                            Container(
+                              child: Text(
                                 "Father's Name",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -85,18 +97,7 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["mother_name"].toString()),
                             ),
-                            Container(
-                              child: Text(
-                                'Student Name',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 3),
-                              child: Text(response["student_name"].toString()),
-                            ),
+
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(
@@ -236,7 +237,6 @@ class _ProfileState extends State<Profile> {
 
   getProfile() async {
     final result = await ServerAPI().getProfile();
-    print(result);
     return result['data'];
   }
 }

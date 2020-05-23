@@ -28,6 +28,7 @@ class IndividualChat extends StatefulWidget {
 }
 
 class _IndividualChatState extends State<IndividualChat> {
+
   var currentUser;
   List chatHistory = [];
   SocketIOManager manager;
@@ -40,6 +41,7 @@ class _IndividualChatState extends State<IndividualChat> {
     getCurrentUser();
     manager = SocketIOManager();
     initSocket();
+    _readAllMessage();
   }
 
   getCurrentUser() async {
@@ -371,6 +373,10 @@ class _IndividualChatState extends State<IndividualChat> {
         now.minute.toString() +
         ":" +
         now.second.toString();
+  }
+
+  _readAllMessage() async {
+    await ServerAPI().readAllMessage(widget.chat_group_id);
   }
 
   @override
