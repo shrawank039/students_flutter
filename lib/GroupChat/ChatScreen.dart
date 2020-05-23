@@ -17,9 +17,9 @@ class MyChatScreen extends StatefulWidget {
   final String calss_id;
   final String class_status;
   final String student_id;
+  final String subjectID;
 
-  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject,
-      this.student_id, this.chat_group_id);
+  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject, this.student_id, this.chat_group_id, this.subjectID);
 
   @override
   _MyChatState createState() => _MyChatState();
@@ -45,6 +45,7 @@ class _MyChatState extends State<MyChatScreen> {
         isActive = true;
       });
     }
+    _showAttendanceDialog();
   }
 
   getCurrentUser() async {
@@ -137,7 +138,9 @@ class _MyChatState extends State<MyChatScreen> {
                 Divider(height: 1.0),
                 chatInput(),
               ],
-            )));
+            )
+        )
+    );
   }
 
   Widget chatInput() {
@@ -345,6 +348,46 @@ class _MyChatState extends State<MyChatScreen> {
         ":" +
         now.second.toString();
   }
+
+  Future<void> _showAttendanceDialog() async {
+    var myContext = context;
+    final result = await ServerAPI().getAttendance(widget.subjectID);
+    if(result['status'] == 'failure'){
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Mark Your Attendance'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Mark your attendance for '+widget.subject),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancle'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(myContext);
+                },
+              ),
+              FlatButton(
+                child: Text('Mark Attandance'),
+                onPressed: () async {
+                  await ServerAPI().submitAttendence(widget.subjectID);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
 
   @override
   void dispose() {

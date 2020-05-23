@@ -197,11 +197,12 @@ class ServerAPI {
     }
   }
 
-  Future<Map<String, dynamic>> submitAttendence() async {
+  Future<Map<String, dynamic>> submitAttendence(subjectID) async {
     final userInfo = await this.getUserInfo();
     final studentID = userInfo['id'];
     final schoolID = userInfo['school_id'];
-    final response = await http.get(apiRoot+"/submitAttendence?student_id=$studentID&school_id=$schoolID", headers: _buildHeader());
+    final classID = userInfo['class_id'];
+    final response = await http.get(apiRoot+"/submitAttendence?student_id=$studentID&school_id=$schoolID&class_id=$classID&subject_id=$subjectID", headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -237,6 +238,19 @@ class ServerAPI {
     final userInfo = await this.getUserInfo();
     final userID = userInfo['id'];
     final response = await http.get(apiRoot+"/addSupport?student_id=$userID&status=1", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+
+  Future<Map<String, dynamic>> getAttendance(subjectID) async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final schoolID = userInfo['school_id'];
+    final response = await http.get(apiRoot+"/getAttendencedata?student_id=$userID&school_id=$schoolID&subject_id="+subjectID, headers: _buildHeader());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {

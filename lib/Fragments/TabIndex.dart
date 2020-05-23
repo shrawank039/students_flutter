@@ -21,15 +21,7 @@ class _TabIndexState extends State<TabIndex> {
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.check),
-              tooltip: 'Mark Attendence',
-              onPressed: () async {
-                final result = await ServerAPI().submitAttendence();
-                _scaffolkey.currentState
-                    .showSnackBar(ServerAPI.successToast(result['msg']));
-              },
-            ),
+
           ],
           bottom: TabBar(
             tabs: [
