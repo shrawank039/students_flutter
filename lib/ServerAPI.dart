@@ -258,6 +258,31 @@ class ServerAPI {
     }
   }
 
+
+  Future<Map<String, dynamic>> getCurrentDayAttendance() async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final classID = userInfo['class_id'];
+    final response = await http.get(apiRoot+"/getCurrentDayAttendance?student_id=$userID&class_id=$classID", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Map<String, dynamic>> getPreviousDayAttendance(date) async {
+    final userInfo = await this.getUserInfo();
+    final userID = userInfo['id'];
+    final classID = userInfo['class_id'];
+    final response = await http.get(apiRoot+"/getPreviousDayAttendance?student_id=$userID&class_id=$classID&date=$date", headers: _buildHeader());
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
   Future<Map<String, dynamic>> readAllMessage(chatRoomID) async {
     final response = await http.get(apiRoot+"/setReadMessage?room_id=$chatRoomID&sender=student", headers: _buildHeader());
     if (response.statusCode == 200) {

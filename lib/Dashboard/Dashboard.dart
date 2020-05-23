@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:students/Attendance/ViewAttendance.dart';
 import 'package:students/Screens/ContactAgreement.dart';
 import '../Announcement/Announcement.dart';
 import '../Fragments/TabIndex.dart';
@@ -174,11 +175,17 @@ class _DashboardState extends State<Dashboard> {
                               builder: (context) => ContactAgreement());
                           Navigator.push(context, route);
                         }
+
                         if (index == 4) {
-                          Route route = MaterialPageRoute(
-                              builder: (context) => Profile());
+                          Route route = MaterialPageRoute(builder: (context) => Profile());
                           Navigator.push(context, route);
                         }
+
+                        if (index == 5) {
+                          Route route = MaterialPageRoute(builder: (context) => ViewAttendance());
+                          Navigator.push(context, route);
+                        }
+
                       },
                       child: Container(
                         color: colors[index],
