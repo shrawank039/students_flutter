@@ -3,9 +3,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../FileViewer.dart';
 import '../ServerAPI.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:image_picker/image_picker.dart';
@@ -96,14 +99,14 @@ class _IndividualChatState extends State<IndividualChat> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.camera_alt),
+              icon: Icon(Icons.camera_alt),
               tooltip: 'Pick From Camera',
               onPressed: () async {
                 await _selectAttachment('camera');
               },
             ),
             IconButton(
-              icon: const Icon(Icons.camera),
+              icon: Icon(Icons.attachment),
               tooltip: 'Pick from Gallery',
               onPressed: () async {
                 await _selectAttachment('gallery');
@@ -229,26 +232,54 @@ class _IndividualChatState extends State<IndividualChat> {
 
   Widget contentWidget(data) {
     if (data['content_type'].toString() == 'text') {
-      return Text(data['content'].toString(),
-          style: TextStyle(
-            fontSize: 17,
-          ));
-    } else {
+      return Text(data['content'].toString(), style: TextStyle(fontSize: 17,));
+    } else if(data['content_type'].toString() == 'image') {
       return CachedNetworkImage(
         imageUrl: data['content'].toString(),
-        imageBuilder: (context, imageProvider) => Container(
-          width: 200,
-          height: 200,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
+        imageBuilder: (context, imageProvider) => GestureDetector(
+          onTap: (){
+            Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+            Navigator.push(context, route);
+          },
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
+    } else if(data['content_type'].toString() == 'pdf') {
+
+      return GestureDetector(
+        onTap: () async {
+          Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+          Navigator.push(context, route);
+        },
+        child: Container(
+          width: 200,
+          height: 150,
+          child: Image.asset('assets/images/pdf.jpg'),
+        ),
+      );
+
+    } else {
+      return GestureDetector(
+        onTap: () async {
+          await launch(data['content'].toString(), enableJavaScript: true);
+        },
+        child: Container(
+          width: 200,
+          height: 150,
+          child: Image.asset('assets/images/document.jpg'),
+        ),
+      );;
     }
   }
 
@@ -298,22 +329,28 @@ class _IndividualChatState extends State<IndividualChat> {
 
   _selectAttachment(type) async {
     var source = ImageSource.camera;
+    var image;
     if (type == "gallery") {
-      source = ImageSource.gallery;
+      image = await FilePicker.getFile(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'pdf', 'doc', 'docx'],
+      );
+    } else {
+      image = await ImagePicker.pickImage(source: source);
     }
-    var image = await ImagePicker.pickImage(source: source);
     final response = await ServerAPI().attachmentUpload(image.path);
+    print(response);
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
       var msg = {
         "room_id": widget.chat_group_id.toString(),
         "student": 'student',
         "send_by": user['id'].toString(),
-        "content_type": "attachment",
+        "content_type": response['data']['fileType'],
         "content": response['data']['attachmentUrl'],
         "created_date": _getDate()
       };
-      socket.emit("individual_chat_room", [msg]);
+      socket.emit("group_chat_room", [msg]);
       _textController.text = "";
       setState(() {
         chatHistory.insert(0, msg);

@@ -8,7 +8,6 @@ import '../Schedule/Schedule.dart';
 import '../ServerAPI.dart';
 import '../CustomDrawer.dart';
 
-
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();

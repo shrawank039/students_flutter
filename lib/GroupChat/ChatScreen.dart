@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../ServerAPI.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:image_picker/image_picker.dart';
+import '../FileViewer.dart';
+import 'package:file_picker/file_picker.dart';
 
 class MyChatScreen extends StatefulWidget {
   final String teacher;
@@ -90,8 +92,6 @@ class _MyChatState extends State<MyChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime time = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(time);
     return Scaffold(
         backgroundColor: Color(0xFFe8dfd8),
         appBar: AppBar(
@@ -110,11 +110,9 @@ class _MyChatState extends State<MyChatScreen> {
               },
             ),
             IconButton(
-              icon: const Icon(Icons.camera),
+              icon: const Icon(Icons.attachment),
               tooltip: 'Pick from Gallery',
-              onPressed: () async {
-                await _selectAttachment('gallery');
-              },
+              onPressed: (){_selectAttachment('gallery');},
             ),
           ],
         ),
@@ -243,26 +241,54 @@ class _MyChatState extends State<MyChatScreen> {
 
   Widget contentWidget(data) {
     if (data['content_type'].toString() == 'text') {
-      return Text(data['content'].toString(),
-          style: TextStyle(
-            fontSize: 17,
-          ));
-    } else {
+      return Text(data['content'].toString(), style: TextStyle(fontSize: 17,));
+    } else if(data['content_type'].toString() == 'image') {
       return CachedNetworkImage(
         imageUrl: data['content'].toString(),
-        imageBuilder: (context, imageProvider) => Container(
-          width: 200,
-          height: 200,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
+        imageBuilder: (context, imageProvider) => GestureDetector(
+          onTap: (){
+            Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+            Navigator.push(context, route);
+          },
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
+    } else if(data['content_type'].toString() == 'pdf') {
+
+      return GestureDetector(
+        onTap: () async {
+          Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+          Navigator.push(context, route);
+        },
+        child: Container(
+          width: 200,
+          height: 150,
+          child: Image.asset('assets/images/pdf.jpg'),
+        ),
+      );
+
+    } else {
+      return GestureDetector(
+        onTap: () async {
+          await launch(data['content'].toString(), enableJavaScript: true);
+        },
+        child: Container(
+          width: 200,
+          height: 150,
+          child: Image.asset('assets/images/document.jpg'),
+        ),
+      );;
     }
   }
 
@@ -311,18 +337,24 @@ class _MyChatState extends State<MyChatScreen> {
 
   _selectAttachment(type) async {
     var source = ImageSource.camera;
+    var image;
     if (type == "gallery") {
-      source = ImageSource.gallery;
+      image = await FilePicker.getFile(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'pdf', 'doc', 'docx'],
+      );
+    } else {
+      image = await ImagePicker.pickImage(source: source);
     }
-    var image = await ImagePicker.pickImage(source: source);
     final response = await ServerAPI().attachmentUpload(image.path);
+    print(response);
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
       var msg = {
         "room_id": widget.chat_group_id.toString(),
         "student": 'student',
         "send_by": user['id'].toString(),
-        "content_type": "attachment",
+        "content_type": response['data']['fileType'],
         "content": response['data']['attachmentUrl'],
         "created_date": _getDate()
       };
@@ -351,43 +383,44 @@ class _MyChatState extends State<MyChatScreen> {
 
   Future<void> _showAttendanceDialog() async {
     var myContext = context;
-    final result = await ServerAPI().getAttendance(widget.subjectID);
-    if(result['status'] == 'failure'){
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Mark Your Attendance'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('Mark your attendance for '+widget.subject),
-                ],
+    if(isActive){
+      final result = await ServerAPI().getAttendance(widget.subjectID);
+      if(result['status'] == 'failure'){
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Mark Your Attendance'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Mark your attendance for '+widget.subject),
+                  ],
+                ),
               ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Cancle'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(myContext);
-                },
-              ),
-              FlatButton(
-                child: Text('Mark Attandance'),
-                onPressed: () async {
-                  await ServerAPI().submitAttendence(widget.subjectID);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancle'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(myContext);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Mark Attandance'),
+                  onPressed: () async {
+                    await ServerAPI().submitAttendence(widget.subjectID);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
-
 
   @override
   void dispose() {
