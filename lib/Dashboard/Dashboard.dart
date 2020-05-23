@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:students/Screens/ContactAgreement.dart';
-
 import '../Announcement/Announcement.dart';
 import '../Fragments/TabIndex.dart';
 import '../Profile/Profile.dart';
 import '../Schedule/Schedule.dart';
 import '../ServerAPI.dart';
+import '../CustomDrawer.dart';
+
 
 class Dashboard extends StatefulWidget {
   @override
@@ -62,6 +63,7 @@ class _DashboardState extends State<Dashboard> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        drawer: CustomDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
           title: Text("Student Dashboard"),
