@@ -4,10 +4,6 @@ import 'package:students/Dashboard/Dashboard.dart';
 
 import '../ServerAPI.dart';
 
-void main() {
-  runApp(Login());
-}
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();

@@ -11,8 +11,21 @@ void main() {
       .setInFocusDisplayType(OSNotificationDisplayType.notification);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isLogin();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,13 +40,15 @@ class MyApp extends StatelessWidget {
       home: Login(),
     );
   }
-}
 
-_isLogin(BuildContext context) async {
-  if (await ServerAPI().isLogin()) {
-    Route route = MaterialPageRoute(builder: (context) => Dashboard());
-    Navigator.pushReplacement(context, route);
-  } else {
-    print("not login");
+  _isLogin() async {
+    if (await ServerAPI().isLogin()) {
+      print("login");
+      Route route = MaterialPageRoute(builder: (context) => Dashboard());
+      Navigator.pushReplacement(context, route);
+    } else {
+      print("not login");
+    }
   }
+
 }
