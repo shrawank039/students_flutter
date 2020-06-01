@@ -11,6 +11,7 @@ import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:image_picker/image_picker.dart';
 import '../FileViewer.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class MyChatScreen extends StatefulWidget {
   final String teacher;
@@ -34,6 +35,7 @@ class _MyChatState extends State<MyChatScreen> {
   SocketIO socket;
   final _textController = TextEditingController();
   bool isActive = false;
+  bool _saving = false;
 
   @override
   void initState() {
@@ -116,27 +118,30 @@ class _MyChatState extends State<MyChatScreen> {
             ),
           ],
         ),
-        body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Color(0xFFe8dfd8),
-            child: Column(
-              children: <Widget>[
-                //Chat list
-                Flexible(
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(8.0),
-                    reverse: true,
-                    itemBuilder: (context, int index) {
-                      return chatList(chatHistory[index]);
-                    },
-                    itemCount: chatHistory.length,
+        body: LoadingOverlay(
+          child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Color(0xFFe8dfd8),
+              child: Column(
+                children: <Widget>[
+                  //Chat list
+                  Flexible(
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(8.0),
+                      reverse: true,
+                      itemBuilder: (context, int index) {
+                        return chatList(chatHistory[index]);
+                      },
+                      itemCount: chatHistory.length,
+                    ),
                   ),
-                ),
-                Divider(height: 1.0),
-                chatInput(),
-              ],
-            )
+                  Divider(height: 1.0),
+                  chatInput(),
+                ],
+              )
+          ),
+            isLoading: _saving
         )
     );
   }
@@ -177,7 +182,6 @@ class _MyChatState extends State<MyChatScreen> {
       return Container();
     }
   }
-
   Widget chatList(data) {
     var align = CrossAxisAlignment.end;
     var myLeft = null;
@@ -336,6 +340,7 @@ class _MyChatState extends State<MyChatScreen> {
   }
 
   _selectAttachment(type) async {
+    _showLoader();
     var source = ImageSource.camera;
     var image;
     if (type == "gallery") {
@@ -347,7 +352,6 @@ class _MyChatState extends State<MyChatScreen> {
       image = await ImagePicker.pickImage(source: source);
     }
     final response = await ServerAPI().attachmentUpload(image.path);
-    print(response);
     final user = await ServerAPI().getUserInfo();
     if (socket != null) {
       var msg = {
@@ -364,6 +368,7 @@ class _MyChatState extends State<MyChatScreen> {
         chatHistory.insert(0, msg);
       });
     }
+    _hideLoader();
   }
 
   _getDate() {
@@ -380,7 +385,6 @@ class _MyChatState extends State<MyChatScreen> {
         ":" +
         now.second.toString();
   }
-
   Future<void> _showAttendanceDialog() async {
     var myContext = context;
     if(isActive){
@@ -420,6 +424,18 @@ class _MyChatState extends State<MyChatScreen> {
         );
       }
     }
+  }
+
+  _showLoader(){
+    setState(() {
+      _saving = true;
+    });
+  }
+
+  _hideLoader(){
+    setState(() {
+      _saving = false;
+    });
   }
 
   @override

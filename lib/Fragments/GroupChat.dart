@@ -188,6 +188,7 @@ class _GroupChatState extends State<GroupChat> {
 
   todaySchedule() async{
     final result = await ServerAPI().todaySchedule();
+    print(result);
     return result["data"];
   }
 }

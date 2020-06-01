@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../CustomDrawer.dart';
 import '../ServerAPI.dart';
 
 class Announcement extends StatefulWidget {
@@ -11,6 +12,7 @@ class _AnnouncementState extends State<Announcement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text("Announcement"),
         backgroundColor: Colors.blueGrey,
@@ -42,7 +44,13 @@ class _AnnouncementState extends State<Announcement> {
                       ),
                     );
                   });
-            } else {
+            } else if( response.length < 1 ){
+              return Center(
+                  child: Text(
+                    "No Records Found",
+                    style: TextStyle(fontSize: 20),
+                  ));
+            }else {
               return Center(
                   child: Text(
                 "Loading....",

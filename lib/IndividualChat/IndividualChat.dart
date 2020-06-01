@@ -12,6 +12,7 @@ import '../FileViewer.dart';
 import '../ServerAPI.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class IndividualChat extends StatefulWidget {
   final String teacher;
@@ -34,6 +35,7 @@ class _IndividualChatState extends State<IndividualChat> {
   SocketIOManager manager;
   final _textController = TextEditingController();
   SocketIO socket;
+  bool _saving = false;
 
   @override
   void initState() {
@@ -88,14 +90,12 @@ class _IndividualChatState extends State<IndividualChat> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime time = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(time);
     return Scaffold(
         backgroundColor: Color(0xFFe8dfd8),
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
           title: Text(
-            widget.subject.toString() + " Class Discussion",
+            widget.subject.toString() + " Homework Submission",
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.center,
           ),
@@ -116,59 +116,63 @@ class _IndividualChatState extends State<IndividualChat> {
             ),
           ],
         ),
-        body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Color(0xFFe8dfd8),
-            child: Column(
-              children: <Widget>[
-                //Chat list
-                Flexible(
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(8.0),
-                    reverse: true,
-                    itemBuilder: (context, int index) {
-                      return chatList(chatHistory[index]);
-                    },
-                    itemCount: chatHistory.length,
+        body: LoadingOverlay(
+          child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Color(0xFFe8dfd8),
+              child: Column(
+                children: <Widget>[
+                  //Chat list
+                  Flexible(
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(8.0),
+                      reverse: true,
+                      itemBuilder: (context, int index) {
+                        return chatList(chatHistory[index]);
+                      },
+                      itemCount: chatHistory.length,
+                    ),
                   ),
-                ),
-                Divider(height: 1.0),
-                Container(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).cardColor),
-                    child: IconTheme(
-                        data:
-                            IconThemeData(color: Theme.of(context).accentColor),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child: Row(
-                            children: <Widget>[
-                              //Enter Text message here
-                              Flexible(
-                                child: TextField(
-                                  controller: _textController,
-                                  decoration: InputDecoration.collapsed(
-                                      hintText: "Enter message"),
+                  Divider(height: 1.0),
+                  Container(
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).cardColor),
+                      child: IconTheme(
+                          data:
+                              IconThemeData(color: Theme.of(context).accentColor),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Row(
+                              children: <Widget>[
+                                //Enter Text message here
+                                Flexible(
+                                  child: TextField(
+                                    controller: _textController,
+                                    decoration: InputDecoration.collapsed(
+                                        hintText: "Enter message"),
+                                  ),
                                 ),
-                              ),
 
-                              //right send button
+                                //right send button
 
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 2.0),
-                                width: 48.0,
-                                height: 48.0,
-                                child: IconButton(
-                                    icon: Image.asset(
-                                        "assets/images/send_out.png"),
-                                    onPressed: _sendChatMessage),
-                              ),
-                            ],
-                          ),
-                        ))),
-              ],
-            )));
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 2.0),
+                                  width: 48.0,
+                                  height: 48.0,
+                                  child: IconButton(
+                                      icon: Image.asset(
+                                          "assets/images/send_out.png"),
+                                      onPressed: _sendChatMessage),
+                                ),
+                              ],
+                            ),
+                          ))),
+                ],
+              )),
+          isLoading: _saving
+        )
+    );
   }
 
   Widget chatList(data) {
@@ -204,7 +208,7 @@ class _IndividualChatState extends State<IndividualChat> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(
-                        "2020-05-11",
+                        data['created_date'].toString(),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         textAlign: TextAlign.right,
                       ),
@@ -330,6 +334,7 @@ class _IndividualChatState extends State<IndividualChat> {
   }
 
   _selectAttachment(type) async {
+    _showLoader();
     var source = ImageSource.camera;
     var image;
     if (type == "gallery") {
@@ -352,12 +357,13 @@ class _IndividualChatState extends State<IndividualChat> {
         "content": response['data']['attachmentUrl'],
         "created_date": _getDate()
       };
-      socket.emit("group_chat_room", [msg]);
+      socket.emit("individual_chat_room", [msg]);
       _textController.text = "";
       setState(() {
         chatHistory.insert(0, msg);
       });
     }
+    _hideLoader();
   }
 
   _getDate() {
@@ -377,6 +383,18 @@ class _IndividualChatState extends State<IndividualChat> {
 
   _readAllMessage() async {
     await ServerAPI().readAllMessage(widget.chat_group_id);
+  }
+
+  _showLoader(){
+    setState(() {
+      _saving = true;
+    });
+  }
+
+  _hideLoader(){
+    setState(() {
+      _saving = false;
+    });
   }
 
   @override

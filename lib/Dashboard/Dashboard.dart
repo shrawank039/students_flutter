@@ -25,7 +25,6 @@ class _DashboardState extends State<Dashboard> {
     'Time Table',
     'Announcement',
     'Class Room',
-    'Support',
     'Profile',
     'Attandance'
   ];
@@ -34,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
     'assets/images/schedule.png',
     'assets/images/announcement.png',
     'assets/images/chat.png',
-    'assets/images/suppoert0.png',
     'assets/images/profile.png',
     'assets/images/profile.png',
   ];
@@ -43,7 +41,6 @@ class _DashboardState extends State<Dashboard> {
     Colors.blue[200],
     Colors.red[300],
     Colors.orange[300],
-    Colors.purple[200],
     Colors.green[300],
     Colors.purple[300],
   ];
@@ -170,18 +167,18 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(context, route);
                         }
 
-                        if (index == 3) {
-                          Route route = MaterialPageRoute(
-                              builder: (context) => ContactAgreement());
-                          Navigator.push(context, route);
-                        }
+//                        if (index == 3) {
+//                          Route route = MaterialPageRoute(
+//                              builder: (context) => ContactAgreement());
+//                          Navigator.push(context, route);
+//                        }
 
-                        if (index == 4) {
+                        if (index == 3) {
                           Route route = MaterialPageRoute(builder: (context) => Profile());
                           Navigator.push(context, route);
                         }
 
-                        if (index == 5) {
+                        if (index == 4) {
                           Route route = MaterialPageRoute(builder: (context) => ViewAttendance());
                           Navigator.push(context, route);
                         }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../CustomDrawer.dart';
 import '../ServerAPI.dart';
 
 class ContactAgreement extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ContactAgreementState extends State<ContactAgreement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text('Contact Agreement'),
         backgroundColor: Colors.blueGrey,

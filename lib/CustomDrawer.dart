@@ -35,7 +35,6 @@ class _DrawerState extends State<CustomDrawer> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final userData = await prefs.get('userData');
     final dateToJson = json.decode(userData);
-    print(dateToJson);
     setState(() {
       student_name = dateToJson['student_name'].toString();
       student_code = dateToJson['student_code'].toString();
@@ -134,6 +133,14 @@ class _DrawerState extends State<CustomDrawer> {
             title: Text('Logout', style: MenuTextStyle,),
             onTap:_logout,
           ),
+
+          Divider(),
+
+          ListTile(
+            title: Text('App version'.toUpperCase(), style: TextStyle(color: Colors.black54,),),
+            trailing: Text("V2.0.1"),
+          ),
+
         ],
       ),
     );
