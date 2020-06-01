@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
 
 _isLogin(BuildContext context) async {
   if (await ServerAPI().isLogin()) {
-    print("login");
     Route route = MaterialPageRoute(builder: (context) => Dashboard());
     Navigator.pushReplacement(context, route);
   } else {

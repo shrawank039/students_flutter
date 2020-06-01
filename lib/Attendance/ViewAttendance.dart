@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:students/ServerAPI.dart';
+
+import '../CustomDrawer.dart';
 
 class ViewAttendance extends StatefulWidget {
   @override
@@ -16,11 +19,14 @@ class _ViewAttendanceState extends State<ViewAttendance> {
     // TODO: implement initState
     super.initState();
     _getCurrentDayAttendance();
+    var date = DateTime.now();
+    dateController.text = date.year.toString()+'-'+date.month.toString()+'-'+date.day.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
         title: Text("View Attendance"),
@@ -34,24 +40,17 @@ class _ViewAttendanceState extends State<ViewAttendance> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: TextFormField(
+                    child: CupertinoTextField(
                       controller: dateController,
                       enabled: false,
-                      decoration: InputDecoration(
-                        alignLabelWithHint: false,
-                        hintStyle: TextStyle(fontSize: 14.0),
-                        labelStyle: TextStyle(fontSize: 16.0),
-                        labelText: 'Select Date',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          borderSide: BorderSide(),
-                        ),
-                      ),
                     )
                   ),
                   GestureDetector(
                       onTap: _selectServiceDate,
-                      child: Icon(Icons.date_range, size: 50, color: Colors.black,)
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Icon(Icons.date_range, size: 35, color: Colors.blueGrey,),
+                      )
                   )
                 ],
               ),
@@ -62,6 +61,8 @@ class _ViewAttendanceState extends State<ViewAttendance> {
                 color: Colors.black12
               ),
             ),
+
+            noData(),
 
             ListView.builder(
               shrinkWrap: true,
@@ -111,10 +112,22 @@ class _ViewAttendanceState extends State<ViewAttendance> {
       return Text("P", style: TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),);
     }
   }
-
-
+  Widget noData(){
+    if(attendance.length < 1 ){
+      return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Text(
+              "No Data found".toUpperCase(),
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+      );
+    } else {
+      return Container();
+    }
+  }
   _selectServiceDate() async {
-
     var selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),

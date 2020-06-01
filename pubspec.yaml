@@ -40,6 +40,7 @@ dependencies:
   url_launcher: ^5.4.7
   advance_pdf_viewer: ^1.1.6
   file_picker: ^1.9.0+1
+  loading_overlay: ^0.2.1
 
 dev_dependencies:
   flutter_test:

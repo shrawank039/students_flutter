@@ -40,24 +40,8 @@ class _LoginState extends State<Login> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Positioned(
-            bottom: 15,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Text(
-                  'POWERED BY \n 21 century innovative solutions Pvt. Ltd.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-            ),
-          ),
           SingleChildScrollView(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 150),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 50),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -128,6 +112,20 @@ class _LoginState extends State<Login> {
                     onPressed: _authCheck,
                   ),
                 ),
+                SizedBox(height: 50,),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: Text(
+                      'POWERED BY \n 21 century innovative solutions Pvt. Ltd.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -174,8 +172,7 @@ class _LoginState extends State<Login> {
           Route route = MaterialPageRoute(builder: (context) => Dashboard());
           Navigator.pushReplacement(context, route);
         } else {
-          _scaffolkey.currentState
-              .showSnackBar(ServerAPI.errorToast(result["msg"].toString()));
+          _scaffolkey.currentState.showSnackBar(ServerAPI.errorToast(result["msg"].toString()));
         }
       } catch (e) {
         print(e.toString());

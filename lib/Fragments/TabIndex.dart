@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../CustomDrawer.dart';
 import 'Assignment.dart';
 import 'GroupChat.dart';
 import 'TeachersList.dart';
@@ -18,6 +19,7 @@ class _TabIndexState extends State<TabIndex> {
       length: 3,
       child: Scaffold(
         key: _scaffolkey,
+        drawer: CustomDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
           actions: <Widget>[

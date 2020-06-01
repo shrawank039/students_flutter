@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:students/Auth/Login.dart';
+import 'package:students/CustomDrawer.dart';
 
 import '../ServerAPI.dart';
 
@@ -19,6 +20,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
         title: Text('Profile'),
@@ -158,66 +160,6 @@ class _ProfileState extends State<Profile> {
                         height: 1,
                         child: Container(
                           color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(10.0),
-                        child: Text(
-                          'Academic Details',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                'Program',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 3),
-                              child: Text(response["program"].toString()),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Batch',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 3),
-                              child: Text(response["batch"].toString()),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Class',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 3),
-                              child: Text(response["class_name"].toString()),
-                            ),
-                          ],
                         ),
                       ),
                     ],
