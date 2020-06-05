@@ -124,12 +124,12 @@ class _ViewAttendanceState extends State<ViewAttendance> {
     if (attendance.length < 1) {
       return Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: Text(
-              "No Data found".toUpperCase(),
-              style: TextStyle(fontSize: 16),
-            ),
-          ));
+        padding: const EdgeInsets.only(top: 50),
+        child: Text(
+          "No Data found".toUpperCase(),
+          style: TextStyle(fontSize: 16),
+        ),
+      ));
     } else {
       return Container();
     }

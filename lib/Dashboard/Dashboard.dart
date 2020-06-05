@@ -22,7 +22,7 @@ class _DashboardState extends State<Dashboard> {
 
   final androidVersionNames = [
     'Time Table',
-    'Announcement',
+    'Announce-\nment',
     'Class Room',
     'Profile',
     'Attendance'
@@ -32,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
     'assets/images/schedule.png',
     'assets/images/announcement.png',
     'assets/images/chat.png',
-    'assets/images/profile.png',
+    'assets/images/attendance.png',
     'assets/images/profile.png',
   ];
 
@@ -201,6 +201,7 @@ class _DashboardState extends State<Dashboard> {
                               margin: EdgeInsets.only(top: 5.0),
                               child: Text(
                                 androidVersionNames[index],
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,

@@ -46,7 +46,13 @@ class _LoginState extends State<Login> {
                   width: 200,
                   height: 150,
                 ),
-                Text("Student Sign in".toUpperCase(), style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blueAccent),),
+                Text(
+                  "Student Sign in".toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent),
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -56,7 +62,8 @@ class _LoginState extends State<Login> {
                     hintText: 'Username',
                   ),
                   onChanged: (value) {
-                    setState(() {
+                    setState(
+                      () {
                         username = value;
                       },
                     );
@@ -108,9 +115,14 @@ class _LoginState extends State<Login> {
                     onPressed: _authCheck,
                   ),
                 ),
-                SizedBox(height: 50,),
+                SizedBox(
+                  height: 50,
+                ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   child: Center(
                     child: Text(
                       'POWERED BY \n 21 century innovative solutions Pvt. Ltd.',
@@ -168,7 +180,8 @@ class _LoginState extends State<Login> {
           Route route = MaterialPageRoute(builder: (context) => Dashboard());
           Navigator.pushReplacement(context, route);
         } else {
-          _scaffolkey.currentState.showSnackBar(ServerAPI.errorToast(result["msg"].toString()));
+          _scaffolkey.currentState
+              .showSnackBar(ServerAPI.errorToast(result["msg"].toString()));
         }
       } catch (e) {
         print(e.toString());
