@@ -32,8 +32,8 @@ class _DashboardState extends State<Dashboard> {
     'assets/images/schedule.png',
     'assets/images/announcement.png',
     'assets/images/chat.png',
-    'assets/images/attendance.png',
     'assets/images/profile.png',
+    'assets/images/attendance.png',
   ];
 
   final colors = [

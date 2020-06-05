@@ -139,29 +139,11 @@ class _ViewAttendanceState extends State<ViewAttendance> {
     var selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime(
-          DateTime
-              .now()
-              .year, DateTime
-          .now()
-          .month, DateTime
-          .now()
-          .day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       firstDate: DateTime(
-          DateTime
-              .now()
-              .year - 1, DateTime
-          .now()
-          .month, DateTime
-          .now()
-          .day),
+          DateTime.now().year - 1, DateTime.now().month, DateTime.now().day),
       lastDate: DateTime(
-          DateTime
-              .now()
-              .year, DateTime
-          .now()
-          .month, DateTime
-          .now()
-          .day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -179,7 +161,7 @@ class _ViewAttendanceState extends State<ViewAttendance> {
         selectedDate.day.toString();
     dateController.text = formatDate;
     final result =
-    await ServerAPI().getPreviousDayAttendance(formatDate.toString());
+        await ServerAPI().getPreviousDayAttendance(formatDate.toString());
     print(result);
     setState(() {
       attendance = result['data'];
