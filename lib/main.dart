@@ -18,7 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Fluter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        accentColor: Colors.blueGrey,
+        accentColor: Colors.blue,
         primaryColor: Colors.white,
         primaryColorDark: Colors.white,
         fontFamily: 'Gamja Flower',
@@ -50,5 +49,4 @@ class _MyAppState extends State<MyApp> {
       print("not login");
     }
   }
-
 }

@@ -82,7 +82,7 @@ flutter:
   fonts:
     - family: Gamja Flower
       fonts:
-        - asset: fonts/GamjaFlower_Regular.ttf
+        - asset: fonts/Montserrat-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

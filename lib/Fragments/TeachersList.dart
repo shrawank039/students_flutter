@@ -22,7 +22,7 @@ class _TeachersListState extends State<TeachersList> {
     if (widget.title != "") {
       appBar = AppBar(
         title: Text(widget.title.toString()),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       );
     }
   }
@@ -43,7 +43,8 @@ class _TeachersListState extends State<TeachersList> {
                     children: <Widget>[
                       ListTile(
                         onTap: () async {
-                          Route route = MaterialPageRoute(builder: (context) => IndividualChat(
+                          Route route = MaterialPageRoute(
+                              builder: (context) => IndividualChat(
                                   response[index]['class_id'].toString(),
                                   response[index]['teacher_id'].toString(),
                                   response[index]['subject_name'].toString(),
@@ -59,8 +60,10 @@ class _TeachersListState extends State<TeachersList> {
                           response[index]['teacher_name'].toString(),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text(response[index]['subject_name'].toString()),
-                        trailing: customCountViewer(response[index]['unread_message']),
+                        subtitle:
+                            Text(response[index]['subject_name'].toString()),
+                        trailing: customCountViewer(
+                            response[index]['unread_message']),
                       ),
                       Container(
                         height: 1,
@@ -73,27 +76,33 @@ class _TeachersListState extends State<TeachersList> {
           } else {
             return Center(
                 child: Text(
-              "Loading....",
-              style: TextStyle(fontSize: 20),
-            ));
+                  "Loading....",
+                  style: TextStyle(fontSize: 20),
+                ));
           }
         },
       ),
     );
   }
 
-  Widget customCountViewer(count){
-    if(count > 0 ){
+  Widget customCountViewer(count) {
+    if (count > 0) {
       return Container(
         width: 30,
         height: 30,
         child: CircleAvatar(
           backgroundColor: Colors.green,
-          child: Text(count.toString(), style: TextStyle(color: Colors.white),),
+          child: Text(
+            count.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       );
     } else {
-      return Container(width: 30, height: 30,);
+      return Container(
+        width: 30,
+        height: 30,
+      );
     }
   }
 

@@ -22,7 +22,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
         title: Text('Profile'),
         actions: <Widget>[
           IconButton(
@@ -99,7 +99,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["mother_name"].toString()),
                             ),
-
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(

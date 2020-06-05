@@ -29,7 +29,6 @@ class IndividualChat extends StatefulWidget {
 }
 
 class _IndividualChatState extends State<IndividualChat> {
-
   var currentUser;
   List chatHistory = [];
   SocketIOManager manager;
@@ -93,7 +92,7 @@ class _IndividualChatState extends State<IndividualChat> {
     return Scaffold(
         backgroundColor: Color(0xFFe8dfd8),
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
           title: Text(
             widget.subject.toString() + " Homework Submission",
             style: TextStyle(color: Colors.white),
@@ -117,62 +116,62 @@ class _IndividualChatState extends State<IndividualChat> {
           ],
         ),
         body: LoadingOverlay(
-          child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Color(0xFFe8dfd8),
-              child: Column(
-                children: <Widget>[
-                  //Chat list
-                  Flexible(
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (context, int index) {
-                        return chatList(chatHistory[index]);
-                      },
-                      itemCount: chatHistory.length,
+            child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Color(0xFFe8dfd8),
+                child: Column(
+                  children: <Widget>[
+                    //Chat list
+                    Flexible(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(8.0),
+                        reverse: true,
+                        itemBuilder: (context, int index) {
+                          return chatList(chatHistory[index]);
+                        },
+                        itemCount: chatHistory.length,
+                      ),
                     ),
-                  ),
-                  Divider(height: 1.0),
-                  Container(
-                      decoration:
-                          BoxDecoration(color: Theme.of(context).cardColor),
-                      child: IconTheme(
-                          data:
-                              IconThemeData(color: Theme.of(context).accentColor),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Row(
-                              children: <Widget>[
-                                //Enter Text message here
-                                Flexible(
-                                  child: TextField(
-                                    controller: _textController,
-                                    decoration: InputDecoration.collapsed(
-                                        hintText: "Enter message"),
+                    Divider(height: 1.0),
+                    Container(
+                        decoration:
+                            BoxDecoration(color: Theme.of(context).cardColor),
+                        child: IconTheme(
+                            data: IconThemeData(
+                                color: Theme.of(context).accentColor),
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 2.0),
+                              child: Row(
+                                children: <Widget>[
+                                  //Enter Text message here
+                                  Flexible(
+                                    child: TextField(
+                                      controller: _textController,
+                                      decoration: InputDecoration.collapsed(
+                                          hintText: "Enter message"),
+                                    ),
                                   ),
-                                ),
 
-                                //right send button
+                                  //right send button
 
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 2.0),
-                                  width: 48.0,
-                                  height: 48.0,
-                                  child: IconButton(
-                                      icon: Image.asset(
-                                          "assets/images/send_out.png"),
-                                      onPressed: _sendChatMessage),
-                                ),
-                              ],
-                            ),
-                          ))),
-                ],
-              )),
-          isLoading: _saving
-        )
-    );
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    width: 48.0,
+                                    height: 48.0,
+                                    child: IconButton(
+                                        icon: Image.asset(
+                                            "assets/images/send_out.png"),
+                                        onPressed: _sendChatMessage),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                  ],
+                )),
+            isLoading: _saving));
   }
 
   Widget chatList(data) {
@@ -238,34 +237,44 @@ class _IndividualChatState extends State<IndividualChat> {
 
   Widget contentWidget(data) {
     if (data['content_type'].toString() == 'text') {
-      return Text(data['content'].toString(), style: TextStyle(fontSize: 17,));
-    } else if(data['content_type'].toString() == 'image') {
+      return Text(data['content'].toString(),
+          style: TextStyle(
+            fontSize: 17,
+          ));
+    } else if (data['content_type'].toString() == 'image') {
       return CachedNetworkImage(
         imageUrl: data['content'].toString(),
-        imageBuilder: (context, imageProvider) => GestureDetector(
-          onTap: (){
-            Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
-            Navigator.push(context, route);
-          },
-          child: Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
+        imageBuilder: (context, imageProvider) =>
+            GestureDetector(
+              onTap: () {
+                Route route = MaterialPageRoute(
+                    builder: (context) =>
+                        FileViewer(data['content'].toString(),
+                            data['content_type'].toString()));
+                Navigator.push(context, route);
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
-    } else if(data['content_type'].toString() == 'pdf') {
-
+    } else if (data['content_type'].toString() == 'pdf') {
       return GestureDetector(
         onTap: () async {
-          Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+          Route route = MaterialPageRoute(
+              builder: (context) =>
+                  FileViewer(
+                      data['content'].toString(),
+                      data['content_type'].toString()));
           Navigator.push(context, route);
         },
         child: Container(
@@ -274,7 +283,6 @@ class _IndividualChatState extends State<IndividualChat> {
           child: Image.asset('assets/images/pdf.jpg'),
         ),
       );
-
     } else {
       return GestureDetector(
         onTap: () async {
@@ -285,7 +293,8 @@ class _IndividualChatState extends State<IndividualChat> {
           height: 150,
           child: Image.asset('assets/images/document.jpg'),
         ),
-      );;
+      );
+      ;
     }
   }
 
@@ -385,13 +394,13 @@ class _IndividualChatState extends State<IndividualChat> {
     await ServerAPI().readAllMessage(widget.chat_group_id);
   }
 
-  _showLoader(){
+  _showLoader() {
     setState(() {
       _saving = true;
     });
   }
 
-  _hideLoader(){
+  _hideLoader() {
     setState(() {
       _saving = false;
     });

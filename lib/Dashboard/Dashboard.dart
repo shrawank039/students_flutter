@@ -15,7 +15,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   String schoolName = "";
   String studentName = "";
   String schoolLogo = "";
@@ -26,7 +25,7 @@ class _DashboardState extends State<Dashboard> {
     'Announcement',
     'Class Room',
     'Profile',
-    'Attandance'
+    'Attendance'
   ];
 
   final carIcons = [
@@ -68,7 +67,7 @@ class _DashboardState extends State<Dashboard> {
       home: Scaffold(
         drawer: CustomDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
           title: Text("Student Dashboard"),
         ),
         body: Stack(
@@ -79,7 +78,8 @@ class _DashboardState extends State<Dashboard> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    child: Image.asset('assets/images/school_banner.png', fit: BoxFit.fill),
+                    child: Image.asset('assets/images/school_banner.png',
+                        fit: BoxFit.fill),
                     height: 190.0,
                     width: MediaQuery.of(context).size.width,
                   ),
@@ -174,15 +174,16 @@ class _DashboardState extends State<Dashboard> {
 //                        }
 
                         if (index == 3) {
-                          Route route = MaterialPageRoute(builder: (context) => Profile());
+                          Route route = MaterialPageRoute(
+                              builder: (context) => Profile());
                           Navigator.push(context, route);
                         }
 
                         if (index == 4) {
-                          Route route = MaterialPageRoute(builder: (context) => ViewAttendance());
+                          Route route = MaterialPageRoute(
+                              builder: (context) => ViewAttendance());
                           Navigator.push(context, route);
                         }
-
                       },
                       child: Container(
                         color: colors[index],

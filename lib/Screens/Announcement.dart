@@ -45,7 +45,7 @@ class Announcement extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Announcements'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
         ),
         body: ListView.builder(
           itemCount: date.length,

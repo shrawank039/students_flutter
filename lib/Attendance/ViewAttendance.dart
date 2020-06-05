@@ -10,7 +10,6 @@ class ViewAttendance extends StatefulWidget {
 }
 
 class _ViewAttendanceState extends State<ViewAttendance> {
-
   var dateController = TextEditingController();
   List attendance = [];
 
@@ -20,7 +19,11 @@ class _ViewAttendanceState extends State<ViewAttendance> {
     super.initState();
     _getCurrentDayAttendance();
     var date = DateTime.now();
-    dateController.text = date.year.toString()+'-'+date.month.toString()+'-'+date.day.toString();
+    dateController.text = date.year.toString() +
+        '-' +
+        date.month.toString() +
+        '-' +
+        date.day.toString();
   }
 
   @override
@@ -28,10 +31,9 @@ class _ViewAttendanceState extends State<ViewAttendance> {
     return Scaffold(
       drawer: CustomDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
         title: Text("View Attendance"),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -40,30 +42,28 @@ class _ViewAttendanceState extends State<ViewAttendance> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: CupertinoTextField(
-                      controller: dateController,
-                      enabled: false,
-                    )
-                  ),
+                      child: CupertinoTextField(
+                    controller: dateController,
+                    enabled: false,
+                  )),
                   GestureDetector(
                       onTap: _selectServiceDate,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10),
-                        child: Icon(Icons.date_range, size: 35, color: Colors.blueGrey,),
-                      )
-                  )
+                        child: Icon(
+                          Icons.date_range,
+                          size: 35,
+                          color: Colors.blue,
+                        ),
+                      ))
                 ],
               ),
             ),
             Container(
               height: 1,
-              decoration: BoxDecoration(
-                color: Colors.black12
-              ),
+              decoration: BoxDecoration(color: Colors.black12),
             ),
-
             noData(),
-
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -88,7 +88,8 @@ class _ViewAttendanceState extends State<ViewAttendance> {
                           Container(
                             height: 25,
                             width: 25,
-                            child: displayWidget(attendance[index]['attendance_status']),
+                            child: displayWidget(
+                                attendance[index]['attendance_status']),
                           ),
                         ],
                       ),
@@ -97,23 +98,30 @@ class _ViewAttendanceState extends State<ViewAttendance> {
                 );
               },
             )
-
           ],
         ),
       ),
-
     );
   }
 
-  Widget displayWidget(status){
-    if(status == 0 ) {
-      return Text("A", style: TextStyle(color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),);
+  Widget displayWidget(status) {
+    if (status == 0) {
+      return Text(
+        "A",
+        style: TextStyle(
+            color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+      );
     } else {
-      return Text("P", style: TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),);
+      return Text(
+        "P",
+        style: TextStyle(
+            color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+      );
     }
   }
-  Widget noData(){
-    if(attendance.length < 1 ){
+
+  Widget noData() {
+    if (attendance.length < 1) {
       return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 50),
@@ -121,28 +129,57 @@ class _ViewAttendanceState extends State<ViewAttendance> {
               "No Data found".toUpperCase(),
               style: TextStyle(fontSize: 16),
             ),
-          )
-      );
+          ));
     } else {
       return Container();
     }
   }
+
   _selectServiceDate() async {
     var selectedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-      firstDate: DateTime(DateTime.now().year - 1, DateTime.now().month, DateTime.now().day),
-      lastDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      initialDate: DateTime(
+          DateTime
+              .now()
+              .year, DateTime
+          .now()
+          .month, DateTime
+          .now()
+          .day),
+      firstDate: DateTime(
+          DateTime
+              .now()
+              .year - 1, DateTime
+          .now()
+          .month, DateTime
+          .now()
+          .day),
+      lastDate: DateTime(
+          DateTime
+              .now()
+              .year, DateTime
+          .now()
+          .month, DateTime
+          .now()
+          .day),
       builder: (BuildContext context, Widget child) {
         return Theme(
-          data: ThemeData.light().copyWith( primaryColor: Colors.red, accentColor: Colors.red, buttonColor: Colors.red),
+          data: ThemeData.light().copyWith(
+              primaryColor: Colors.red,
+              accentColor: Colors.red,
+              buttonColor: Colors.red),
           child: child,
         );
       },
     );
-    var formatDate = selectedDate.year.toString()+"-"+selectedDate.month.toString()+"-"+selectedDate.day.toString();
+    var formatDate = selectedDate.year.toString() +
+        "-" +
+        selectedDate.month.toString() +
+        "-" +
+        selectedDate.day.toString();
     dateController.text = formatDate;
-    final result = await ServerAPI().getPreviousDayAttendance(formatDate.toString());
+    final result =
+    await ServerAPI().getPreviousDayAttendance(formatDate.toString());
     print(result);
     setState(() {
       attendance = result['data'];
@@ -155,5 +192,4 @@ class _ViewAttendanceState extends State<ViewAttendance> {
       attendance = result['data'];
     });
   }
-
 }

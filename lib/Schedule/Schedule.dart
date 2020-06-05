@@ -9,8 +9,7 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-
-  List subjectList  = [];
+  List subjectList = [];
   bool isFirst = true;
 
   @override
@@ -19,7 +18,7 @@ class _ScheduleState extends State<Schedule> {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text("Time Table"),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -38,11 +37,12 @@ class _ScheduleState extends State<Schedule> {
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: Container(
                         padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10, bottom: 5),
+                        margin: EdgeInsets.only(
+                            left: 10.0, right: 10.0, top: 10, bottom: 5),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black26),
-                            borderRadius: BorderRadius.all(Radius.circular(5.0))
-                        ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0))),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             isExpanded: true,
@@ -72,15 +72,27 @@ class _ScheduleState extends State<Schedule> {
                         itemBuilder: (BuildContext context, int subIndex) {
                           return Card(
                             child: ListTile(
-                              title: Text(subjectList[subIndex]['subject_name'].toString(), style: TextStyle(fontSize: 18, color: Colors.blueAccent),),
-                              subtitle: Text(subjectList[subIndex]['teacher_name'].toString(), style: TextStyle(fontSize: 16),),
-                              trailing: Text("Time : \n"+ subjectList[subIndex]['timeslot'].toString(), style: TextStyle(fontSize: 18)),
+                              title: Text(
+                                subjectList[subIndex]['subject_name']
+                                    .toString(),
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.blueAccent),
+                              ),
+                              subtitle: Text(
+                                subjectList[subIndex]['teacher_name']
+                                    .toString(),
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              trailing: Text(
+                                  "Time : \n" +
+                                      subjectList[subIndex]['timeslot']
+                                          .toString(),
+                                  style: TextStyle(fontSize: 18)),
                             ),
                           );
                         }),
                   ],
                 );
-
               } else {
                 return Center(
                     child: Text(
@@ -95,7 +107,7 @@ class _ScheduleState extends State<Schedule> {
 
   _weeklyScheduleClass() async {
     final result = await ServerAPI().weeklyScheduleClass();
-    if(isFirst){
+    if (isFirst) {
       var keyName = [];
       result['data'].forEach((key, value) {
         keyName.add(key);

@@ -5,7 +5,6 @@ import '../CustomDrawer.dart';
 import '../ServerAPI.dart';
 
 class ContactAgreement extends StatefulWidget {
-
   @override
   _ContactAgreementState createState() => _ContactAgreementState();
 }
@@ -24,7 +23,7 @@ class _ContactAgreementState extends State<ContactAgreement> {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text('Contact Agreement'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -74,9 +73,9 @@ class _ContactAgreementState extends State<ContactAgreement> {
                 },
               ),
             ),
-
-            SizedBox(height: 25,),
-
+            SizedBox(
+              height: 25,
+            ),
             FutureBuilder(
               future: _individualChatRoomList(),
               builder: (BuildContext context, snapshot) {
@@ -98,7 +97,10 @@ class _ContactAgreementState extends State<ContactAgreement> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text("Designation: Teacher"),
-                              trailing: Text(response[index]['teacher_phone'].toString(), style: TextStyle(fontSize: 20),),
+                              trailing: Text(
+                                response[index]['teacher_phone'].toString(),
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
                             Container(
                               height: 1,
@@ -111,14 +113,12 @@ class _ContactAgreementState extends State<ContactAgreement> {
                 } else {
                   return Center(
                       child: Text(
-                        "Loading....",
-                        style: TextStyle(fontSize: 20),
-                      )
-                  );
+                    "Loading....",
+                    style: TextStyle(fontSize: 20),
+                  ));
                 }
               },
             )
-
           ],
         ),
       ),

@@ -30,7 +30,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
       key: _scaffolkey,
       appBar: AppBar(
         title: Text("Submit Assignment"),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       ),
       body: ListView(
         padding: EdgeInsets.only(left: 10, right: 10, top: 20),

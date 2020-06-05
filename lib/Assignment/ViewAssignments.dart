@@ -20,7 +20,7 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Assignments for " + widget.subjectName.toString()),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder(
           future: _getIndividualAssignment(),
@@ -34,12 +34,15 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
                   style: TextStyle(fontSize: 20),
                 ));
               } else {
-
                 return ListView.builder(
                     padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                     itemCount: response.length,
                     itemBuilder: (BuildContext context, int index) {
-                      var deadline = response[index]['last_submission_date'].toString() == "null" ? "" : response[index]['last_submission_date'].toString();
+                      var deadline = response[index]['last_submission_date']
+                                  .toString() ==
+                              "null"
+                          ? ""
+                          : response[index]['last_submission_date'].toString();
                       return Card(
                         child: Column(
                           children: <Widget>[
@@ -48,7 +51,8 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
                                 response[index]['title'].toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text(response[index]['created_date'].toString()),
+                              subtitle: Text(
+                                  response[index]['created_date'].toString()),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -67,20 +71,27 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
                                 children: <Widget>[
                                   FlatButton.icon(
                                       shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(color: Colors.blueAccent)),
+                                          borderRadius:
+                                          BorderRadius.circular(18.0),
+                                          side: BorderSide(
+                                              color: Colors.blueAccent)),
                                       textColor: Colors.blueAccent,
                                       onPressed: () async {
-                                        await _openFile(response[index]['attachment'].toString());
+                                        await _openFile(response[index]
+                                        ['attachment']
+                                            .toString());
                                       },
                                       icon: Icon(Icons.file_download),
                                       label: Text("Download")),
-
                                   Spacer(),
                                   Container(
-                                    child: Text("Deadline : "+ deadline, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),),
+                                    child: Text(
+                                      "Deadline : " + deadline,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue),
+                                    ),
                                   )
-
                                 ],
                               ),
                             )
@@ -138,7 +149,8 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
   }
 
   _getIndividualAssignment() async {
-    final result = await ServerAPI().getIndividualAssignment(widget.sutdentID, widget.subjectID);
+    final result = await ServerAPI()
+        .getIndividualAssignment(widget.sutdentID, widget.subjectID);
     return result["data"];
   }
 }

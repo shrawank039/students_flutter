@@ -32,7 +32,7 @@ class TabsApp extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Chats'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
           bottom: TabBar(
             tabs: <Widget>[
               Tab(

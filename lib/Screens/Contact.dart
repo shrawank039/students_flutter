@@ -11,7 +11,7 @@ class Contact extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
           title: Text('Contact'),
         ),
         body: SingleChildScrollView(

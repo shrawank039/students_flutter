@@ -21,10 +21,8 @@ class _TabIndexState extends State<TabIndex> {
         key: _scaffolkey,
         drawer: CustomDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
-          actions: <Widget>[
-
-          ],
+          backgroundColor: Colors.blue,
+          actions: <Widget>[],
           bottom: TabBar(
             tabs: [
               Tab(

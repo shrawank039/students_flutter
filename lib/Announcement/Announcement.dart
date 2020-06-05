@@ -15,7 +15,7 @@ class _AnnouncementState extends State<Announcement> {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text("Announcement"),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder(
           future: _getAnnouncement(),
@@ -32,25 +32,28 @@ class _AnnouncementState extends State<Announcement> {
                           ListTile(
                             leading: Icon(Icons.notifications_active),
                             title: Text(response[index]['title'].toString()),
-                            subtitle: Text(response[index]['created_date'].toString()),
+                            subtitle: Text(
+                                response[index]['created_date'].toString()),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 10, right: 10, bottom: 10),
-                            child:
-                                Text(response[index]['description'].toString(), textAlign: TextAlign.justify,),
+                            child: Text(
+                              response[index]['description'].toString(),
+                              textAlign: TextAlign.justify,
+                            ),
                           ),
                         ],
                       ),
                     );
                   });
-            } else if( response.length < 1 ){
+            } else if (response.length < 1) {
               return Center(
                   child: Text(
-                    "No Records Found",
-                    style: TextStyle(fontSize: 20),
-                  ));
-            }else {
+                "No Records Found",
+                style: TextStyle(fontSize: 20),
+              ));
+            } else {
               return Center(
                   child: Text(
                 "Loading....",

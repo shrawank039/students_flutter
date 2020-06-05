@@ -22,7 +22,8 @@ class MyChatScreen extends StatefulWidget {
   final String student_id;
   final String subjectID;
 
-  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject, this.student_id, this.chat_group_id, this.subjectID);
+  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject,
+      this.student_id, this.chat_group_id, this.subjectID);
 
   @override
   _MyChatState createState() => _MyChatState();
@@ -97,7 +98,7 @@ class _MyChatState extends State<MyChatScreen> {
     return Scaffold(
         backgroundColor: Color(0xFFe8dfd8),
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blue,
           title: Text(
             widget.subject.toString() + " Class Discussion",
             style: TextStyle(color: Colors.white),
@@ -114,36 +115,35 @@ class _MyChatState extends State<MyChatScreen> {
             IconButton(
               icon: const Icon(Icons.attachment),
               tooltip: 'Pick from Gallery',
-              onPressed: (){_selectAttachment('gallery');},
+              onPressed: () {
+                _selectAttachment('gallery');
+              },
             ),
           ],
         ),
         body: LoadingOverlay(
-          child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Color(0xFFe8dfd8),
-              child: Column(
-                children: <Widget>[
-                  //Chat list
-                  Flexible(
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (context, int index) {
-                        return chatList(chatHistory[index]);
-                      },
-                      itemCount: chatHistory.length,
+            child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Color(0xFFe8dfd8),
+                child: Column(
+                  children: <Widget>[
+                    //Chat list
+                    Flexible(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(8.0),
+                        reverse: true,
+                        itemBuilder: (context, int index) {
+                          return chatList(chatHistory[index]);
+                        },
+                        itemCount: chatHistory.length,
+                      ),
                     ),
-                  ),
-                  Divider(height: 1.0),
-                  chatInput(),
-                ],
-              )
-          ),
-            isLoading: _saving
-        )
-    );
+                    Divider(height: 1.0),
+                    chatInput(),
+                  ],
+                )),
+            isLoading: _saving));
   }
 
   Widget chatInput() {
@@ -182,6 +182,7 @@ class _MyChatState extends State<MyChatScreen> {
       return Container();
     }
   }
+
   Widget chatList(data) {
     var align = CrossAxisAlignment.end;
     var myLeft = null;
@@ -245,13 +246,18 @@ class _MyChatState extends State<MyChatScreen> {
 
   Widget contentWidget(data) {
     if (data['content_type'].toString() == 'text') {
-      return Text(data['content'].toString(), style: TextStyle(fontSize: 17,));
-    } else if(data['content_type'].toString() == 'image') {
+      return Text(data['content'].toString(),
+          style: TextStyle(
+            fontSize: 17,
+          ));
+    } else if (data['content_type'].toString() == 'image') {
       return CachedNetworkImage(
         imageUrl: data['content'].toString(),
         imageBuilder: (context, imageProvider) => GestureDetector(
-          onTap: (){
-            Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+          onTap: () {
+            Route route = MaterialPageRoute(
+                builder: (context) => FileViewer(data['content'].toString(),
+                    data['content_type'].toString()));
             Navigator.push(context, route);
           },
           child: Container(
@@ -268,11 +274,12 @@ class _MyChatState extends State<MyChatScreen> {
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
-    } else if(data['content_type'].toString() == 'pdf') {
-
+    } else if (data['content_type'].toString() == 'pdf') {
       return GestureDetector(
         onTap: () async {
-          Route route = MaterialPageRoute(builder: (context) => FileViewer(data['content'].toString(), data['content_type'].toString()));
+          Route route = MaterialPageRoute(
+              builder: (context) => FileViewer(
+                  data['content'].toString(), data['content_type'].toString()));
           Navigator.push(context, route);
         },
         child: Container(
@@ -281,7 +288,6 @@ class _MyChatState extends State<MyChatScreen> {
           child: Image.asset('assets/images/pdf.jpg'),
         ),
       );
-
     } else {
       return GestureDetector(
         onTap: () async {
@@ -292,7 +298,8 @@ class _MyChatState extends State<MyChatScreen> {
           height: 150,
           child: Image.asset('assets/images/document.jpg'),
         ),
-      );;
+      );
+      ;
     }
   }
 
@@ -385,11 +392,12 @@ class _MyChatState extends State<MyChatScreen> {
         ":" +
         now.second.toString();
   }
+
   Future<void> _showAttendanceDialog() async {
     var myContext = context;
-    if(isActive){
+    if (isActive) {
       final result = await ServerAPI().getAttendance(widget.subjectID);
-      if(result['status'] == 'failure'){
+      if (result['status'] == 'failure') {
         return showDialog<void>(
           context: context,
           barrierDismissible: false, // user must tap button!
@@ -399,7 +407,7 @@ class _MyChatState extends State<MyChatScreen> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('Mark your attendance for '+widget.subject),
+                    Text('Mark your attendance for ' + widget.subject),
                   ],
                 ),
               ),
@@ -426,13 +434,13 @@ class _MyChatState extends State<MyChatScreen> {
     }
   }
 
-  _showLoader(){
+  _showLoader() {
     setState(() {
       _saving = true;
     });
   }
 
-  _hideLoader(){
+  _hideLoader() {
     setState(() {
       _saving = false;
     });
