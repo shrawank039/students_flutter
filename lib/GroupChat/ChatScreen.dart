@@ -211,6 +211,17 @@ class _MyChatState extends State<MyChatScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        data["sender_name"].toString(),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
                   contentWidget(data),
                   Container(
                     child: Padding(
@@ -311,6 +322,7 @@ class _MyChatState extends State<MyChatScreen> {
           "room_id": widget.chat_group_id.toString(),
           "student": 'student',
           "send_by": user['id'].toString(),
+          "sender_name": user['student_name'].toString(),
           "content_type": "text",
           "content": _textController.text.toString(),
           "created_date": _getDate()
@@ -365,6 +377,7 @@ class _MyChatState extends State<MyChatScreen> {
         "room_id": widget.chat_group_id.toString(),
         "student": 'student',
         "send_by": user['id'].toString(),
+        "sender_name": user['student_name'].toString(),
         "content_type": response['data']['fileType'],
         "content": response['data']['attachmentUrl'],
         "created_date": _getDate()

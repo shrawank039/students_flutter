@@ -57,8 +57,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Container(
-                        margin:
-                            EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
+                        margin: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,6 +160,80 @@ class _ProfileState extends State<Profile> {
                           color: Colors.grey,
                         ),
                       ),
+
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        width: MediaQuery.of(context).size.width,
+                        child: Center(child: Text("Academic Information".toUpperCase())),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(top: 10.0, left: 30.0, bottom: 20),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'School Name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 3),
+                              child: Text(response["school_name"].toString()),
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Program',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 3),
+                              child: Text(response["program"].toString()),
+                            ),
+
+
+                            Container(
+                              margin: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Batch',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 3),
+                              child: Text(response["batch"].toString()),
+                            ),
+
+
+                            Container(
+                              margin: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Class',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 3),
+                              child: Text(response["class_name"].toString()),
+                            ),
+                          ],
+                        ),
+                      )
+
                     ],
                   ),
                 ),
@@ -178,6 +251,7 @@ class _ProfileState extends State<Profile> {
 
   getProfile() async {
     final result = await ServerAPI().getProfile();
+    print(result);
     return result['data'];
   }
 }

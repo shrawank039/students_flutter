@@ -22,37 +22,41 @@ class _AnnouncementState extends State<Announcement> {
           builder: (BuildContext context, snapshot) {
             var response = snapshot.data;
             if (response != null) {
-              return ListView.builder(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  itemCount: response.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            leading: Icon(Icons.notifications_active),
-                            title: Text(response[index]['title'].toString()),
-                            subtitle: Text(
-                                response[index]['created_date'].toString()),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 10, right: 10, bottom: 10),
-                            child: Text(
-                              response[index]['description'].toString(),
-                              textAlign: TextAlign.justify,
+
+              if(response.length > 0 ) {
+                return ListView.builder(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    itemCount: response.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: Column(
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.notifications_active),
+                              title: Text(response[index]['title'].toString()),
+                              subtitle: Text(
+                                  response[index]['created_date'].toString()),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  });
-            } else if (response.length < 1) {
-              return Center(
-                  child: Text(
-                "No Records Found",
-                style: TextStyle(fontSize: 20),
-              ));
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 10),
+                              child: Text(
+                                response[index]['description'].toString(),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+              } else {
+                return Center(
+                    child: Text(
+                      "No Records Found",
+                      style: TextStyle(fontSize: 20),
+                    ));
+              }
+
             } else {
               return Center(
                   child: Text(

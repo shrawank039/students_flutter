@@ -9,8 +9,8 @@ import 'Auth/Login.dart';
 import 'Auth/changePassword.dart';
 import 'Fragments/TabIndex.dart';
 import 'Schedule/Schedule.dart';
-import 'Screens/ContactAgreement.dart';
 import 'ServerAPI.dart';
+import 'Support/Contact.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -114,7 +114,7 @@ class _DrawerState extends State<CustomDrawer> {
             leading: const Icon(Icons.live_help),
             title: Text('Support', style: MenuTextStyle,),
             onTap: () {
-              Route route = MaterialPageRoute(builder: (context) => ContactAgreement());
+              Route route = MaterialPageRoute(builder: (context) => Contact());
               Navigator.pushReplacement(context, route);
             },
           ),
@@ -138,7 +138,7 @@ class _DrawerState extends State<CustomDrawer> {
 
           ListTile(
             title: Text('App version'.toUpperCase(), style: TextStyle(color: Colors.black54,),),
-            trailing: Text("V2.0.1"),
+            trailing: Text("V2.0.2"),
           ),
 
         ],

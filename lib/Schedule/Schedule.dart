@@ -12,6 +12,8 @@ class _ScheduleState extends State<Schedule> {
   List subjectList = [];
   bool isFirst = true;
 
+  String selected;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +48,7 @@ class _ScheduleState extends State<Schedule> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            value: keyName[0],
+                            value: selected,
                             hint: Text('Select Service Type'),
                             items: keyName.map((item) {
                               return DropdownMenuItem<String>(
@@ -56,6 +58,7 @@ class _ScheduleState extends State<Schedule> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
+                                selected = value;
                                 subjectList = response[value];
                               });
                             },
@@ -113,6 +116,7 @@ class _ScheduleState extends State<Schedule> {
         keyName.add(key);
       });
       setState(() {
+        selected = keyName[0];
         subjectList = result['data'][keyName[0]];
         isFirst = false;
       });

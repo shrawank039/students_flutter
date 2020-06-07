@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:students/Attendance/ViewAttendance.dart';
-import 'package:students/Screens/ContactAgreement.dart';
 import '../Announcement/Announcement.dart';
 import '../Fragments/TabIndex.dart';
 import '../Profile/Profile.dart';
 import '../Schedule/Schedule.dart';
 import '../ServerAPI.dart';
 import '../CustomDrawer.dart';
+import '../Support/Contact.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -25,7 +25,8 @@ class _DashboardState extends State<Dashboard> {
     'Announce-\nment',
     'Class Room',
     'Profile',
-    'Attendance'
+    'Attendance',
+    'Administrative \nQuery',
   ];
 
   final carIcons = [
@@ -34,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
     'assets/images/chat.png',
     'assets/images/profile.png',
     'assets/images/attendance.png',
+    'assets/images/help.png',
   ];
 
   final colors = [
@@ -42,6 +44,7 @@ class _DashboardState extends State<Dashboard> {
     Colors.orange[300],
     Colors.green[300],
     Colors.purple[300],
+    Colors.red[300],
   ];
 
   @override
@@ -167,11 +170,11 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(context, route);
                         }
 
-//                        if (index == 3) {
-//                          Route route = MaterialPageRoute(
-//                              builder: (context) => ContactAgreement());
-//                          Navigator.push(context, route);
-//                        }
+                        if (index == 5) {
+                          Route route = MaterialPageRoute(
+                              builder: (context) => Contact());
+                          Navigator.push(context, route);
+                        }
 
                         if (index == 3) {
                           Route route = MaterialPageRoute(

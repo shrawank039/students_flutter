@@ -303,4 +303,13 @@ class ServerAPI {
     }
   }
 
+  Future<Map<String, dynamic>> contactQuery(body) async {
+    final response = await http.post(apiRoot + "/contactFormQuery", headers: _buildHeader(), body: body);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
+
 }
