@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:students/ServerAPI.dart';
 
 import '../CustomDrawer.dart';
+import '../Global.dart';
 
 class Schedule extends StatefulWidget {
   @override
@@ -97,11 +98,7 @@ class _ScheduleState extends State<Schedule> {
                   ],
                 );
               } else {
-                return Center(
-                    child: Text(
-                  "Loading....",
-                  style: TextStyle(fontSize: 20),
-                ));
+                return Center(child: Global.spinkitCircle);
               }
             }),
       ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../CustomDrawer.dart';
+import '../Global.dart';
 import '../ServerAPI.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Announcement extends StatefulWidget {
   @override
@@ -22,8 +24,7 @@ class _AnnouncementState extends State<Announcement> {
           builder: (BuildContext context, snapshot) {
             var response = snapshot.data;
             if (response != null) {
-
-              if(response.length > 0 ) {
+              if (response.length > 0) {
                 return ListView.builder(
                     padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                     itemCount: response.length,
@@ -52,17 +53,12 @@ class _AnnouncementState extends State<Announcement> {
               } else {
                 return Center(
                     child: Text(
-                      "No Records Found",
-                      style: TextStyle(fontSize: 20),
-                    ));
+                  "No Records Found",
+                  style: TextStyle(fontSize: 20),
+                ));
               }
-
             } else {
-              return Center(
-                  child: Text(
-                "Loading....",
-                style: TextStyle(fontSize: 20),
-              ));
+              return Center(child: Global.spinkitCircle);
             }
           }),
     );

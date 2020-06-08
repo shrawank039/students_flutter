@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:students/Assignment/SubmitAssignment.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../Global.dart';
 import '../ServerAPI.dart';
 
 class ViewAssignments extends StatefulWidget {
@@ -101,11 +102,7 @@ class _ViewAssignmentsState extends State<ViewAssignments> {
                     });
               }
             } else {
-              return Center(
-                  child: Text(
-                "Loading....",
-                style: TextStyle(fontSize: 20),
-              ));
+              return Center(child: Global.spinkitCircle);
             }
           }),
     );
