@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:students/IndividualChat/IndividualChat.dart';
+import '../Global.dart';
 import '../ServerAPI.dart';
 
 class TeachersList extends StatefulWidget {
@@ -80,11 +81,7 @@ class _TeachersListState extends State<TeachersList> {
             }
 
           } else {
-            return Center(
-                child: Text(
-              "Loading....",
-              style: TextStyle(fontSize: 20),
-            ));
+            return Center(child: Global.spinkitCircle);
           }
         },
       ),

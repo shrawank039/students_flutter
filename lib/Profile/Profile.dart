@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:students/Auth/Login.dart';
 import 'package:students/CustomDrawer.dart';
 
+import '../Global.dart';
 import '../ServerAPI.dart';
 
 class Profile extends StatefulWidget {
@@ -57,7 +58,8 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
+                        margin:
+                            EdgeInsets.only(top: 20.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,15 +162,18 @@ class _ProfileState extends State<Profile> {
                           color: Colors.grey,
                         ),
                       ),
-
                       Container(
                         padding: EdgeInsets.only(top: 10),
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(child: Text("Academic Information".toUpperCase())),
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        child: Center(
+                            child: Text("Academic Information".toUpperCase())),
                       ),
-
                       Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 30.0, bottom: 20),
+                        margin:
+                        EdgeInsets.only(top: 10.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +191,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["school_name"].toString()),
                             ),
-
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(
@@ -200,8 +204,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["program"].toString()),
                             ),
-
-
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(
@@ -215,8 +217,6 @@ class _ProfileState extends State<Profile> {
                               margin: EdgeInsets.only(top: 3),
                               child: Text(response["batch"].toString()),
                             ),
-
-
                             Container(
                               margin: EdgeInsets.only(top: 8.0),
                               child: Text(
@@ -233,17 +233,12 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                       )
-
                     ],
                   ),
                 ),
               );
             } else {
-              return Center(
-                  child: Text(
-                "Loading....",
-                style: TextStyle(fontSize: 20),
-              ));
+              return Center(child: Global.spinkitCircle);
             }
           }),
     );
