@@ -12,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import '../FileViewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
+import 'package:jitsi_meet/jitsi_meeting_listener.dart';
 
 class MyChatScreen extends StatefulWidget {
   final String teacher;
@@ -38,9 +40,14 @@ class _MyChatState extends State<MyChatScreen> {
   bool isActive = false;
   bool _saving = false;
 
+  String isLiveClassGoing = "offline";
+
   @override
   void initState() {
     super.initState();
+
+    print(widget.chat_group_id);
+
     getCurrentUser();
     manager = SocketIOManager();
     initSocket();
@@ -51,6 +58,7 @@ class _MyChatState extends State<MyChatScreen> {
       });
     }
     _showAttendanceDialog();
+    _checkForLiveClass();
   }
 
   getCurrentUser() async {
@@ -90,6 +98,11 @@ class _MyChatState extends State<MyChatScreen> {
         chatHistory.insert(0, message);
       });
     });
+    socket.on("group_chat_room/LiveClassEvent", (message) {
+        if(message["room_id"] == widget.chat_group_id && message["status"] == "online"){
+          showAlertDialog();
+        }
+    });
     socket.connect();
   }
 
@@ -105,20 +118,8 @@ class _MyChatState extends State<MyChatScreen> {
             textAlign: TextAlign.center,
           ),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.camera_alt),
-              tooltip: 'Pick From Camera',
-              onPressed: () async {
-                await _selectAttachment('camera');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.attachment),
-              tooltip: 'Pick from Gallery',
-              onPressed: () {
-                _selectAttachment('gallery');
-              },
-            ),
+            isActive ? IconButton(icon: const Icon(Icons.camera_alt), tooltip: 'Pick From Camera', onPressed: () async {await _selectAttachment('camera');},) : Container(),
+            isActive ? IconButton(icon: const Icon(Icons.attachment), tooltip: 'Pick from Gallery', onPressed: () {_selectAttachment('gallery');},) : Container(),
           ],
         ),
         body: LoadingOverlay(
@@ -457,6 +458,84 @@ class _MyChatState extends State<MyChatScreen> {
     setState(() {
       _saving = false;
     });
+  }
+
+  _checkForLiveClass() async {
+    final result = await ServerAPI().checkForLiveClass(widget.chat_group_id.toString());
+    if(result['status'].toString() != "failure"){
+      setState(() {
+        if(result['data']['status'].toString() == "online"){
+          showAlertDialog();
+        }
+        isLiveClassGoing = result['data']['status'].toString();
+      });
+    }
+  }
+
+  showAlertDialog() {
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Live Class Started'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Would you like to join?"),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancle'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('Join Live Class'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _joinLiveClass();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _joinLiveClass() async {
+    final teacher = await ServerAPI().getUserInfo();
+    try {
+      var options = JitsiMeetingOptions()
+        ..room = widget.chat_group_id.toString() // Required, spaces will be trimmed
+        ..serverURL = "https://meet.21century.in"
+        ..subject = widget.subject.toString()
+        ..userDisplayName = teacher['student_name'].toString()
+        ..audioOnly = false
+        ..audioMuted = false
+        ..videoMuted = true;
+
+      await JitsiMeet.joinMeeting(options,
+          listener: JitsiMeetingListener(
+              onConferenceWillJoin: ({message}) {
+                print("Class WillJoin");
+                //debugPrint("${options.room} will join with message: $message");
+              }, onConferenceJoined: ({message}) async {
+            print("Class Joined");
+
+            //debugPrint("${options.room} joined with message: $message");
+          }, onConferenceTerminated: ({message}) async {
+            print("Class Terminated");
+            //debugPrint("${options.room} terminated with message: $message");
+          })
+      );
+    } catch (error) {
+      debugPrint("error: $error");
+    }
   }
 
   @override

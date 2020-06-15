@@ -8,6 +8,7 @@ import 'Announcement/Announcement.dart';
 import 'Auth/Login.dart';
 import 'Auth/changePassword.dart';
 import 'Fragments/TabIndex.dart';
+import 'NewsRoom/NewsRoom.dart';
 import 'Schedule/Schedule.dart';
 import 'ServerAPI.dart';
 import 'Support/Contact.dart';
@@ -75,28 +76,10 @@ class _DrawerState extends State<CustomDrawer> {
           ),
 
           ListTile(
-            leading: const Icon(Icons.archive),
-            title: Text('Profile', style: MenuTextStyle,),
-            onTap: () {
-              Route route = MaterialPageRoute(builder: (context) => Profile());
-              Navigator.pushReplacement(context, route);
-            },
-          ),
-
-          ListTile(
             leading: const Icon(Icons.calendar_today),
             title: Text('Time Table', style: MenuTextStyle,),
             onTap: () {
               Route route = MaterialPageRoute(builder: (context) => Schedule());
-              Navigator.pushReplacement(context, route);
-            },
-          ),
-
-          ListTile(
-            leading: const Icon(Icons.notifications_active),
-            title: Text('Announcement', style: MenuTextStyle,),
-            onTap: () {
-              Route route = MaterialPageRoute(builder: (context) => Announcement());
               Navigator.pushReplacement(context, route);
             },
           ),
@@ -111,6 +94,33 @@ class _DrawerState extends State<CustomDrawer> {
           ),
 
           ListTile(
+            leading: const Icon(Icons.notifications_active),
+            title: Text('Announcement', style: MenuTextStyle,),
+            onTap: () {
+              Route route = MaterialPageRoute(builder: (context) => Announcement());
+              Navigator.pushReplacement(context, route);
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.bookmark_border),
+            title: Text('GK & News Room', style: MenuTextStyle,),
+            onTap: () {
+              Route route = MaterialPageRoute(builder: (context) => NewsRoom("news", "GK & News Room"));
+              Navigator.pushReplacement(context, route);
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.bookmark_border),
+            title: Text('Educational Stories', style: MenuTextStyle,),
+            onTap: () {
+              Route route = MaterialPageRoute(builder: (context) => NewsRoom('storyTime', "Educational Stories"));
+              Navigator.pushReplacement(context, route);
+            },
+          ),
+
+          ListTile(
             leading: const Icon(Icons.live_help),
             title: Text('Support', style: MenuTextStyle,),
             onTap: () {
@@ -118,6 +128,16 @@ class _DrawerState extends State<CustomDrawer> {
               Navigator.pushReplacement(context, route);
             },
           ),
+
+          ListTile(
+            leading: const Icon(Icons.archive),
+            title: Text('Profile', style: MenuTextStyle,),
+            onTap: () {
+              Route route = MaterialPageRoute(builder: (context) => Profile());
+              Navigator.pushReplacement(context, route);
+            },
+          ),
+
 
           Divider(),
           ListTile(
@@ -138,7 +158,7 @@ class _DrawerState extends State<CustomDrawer> {
 
           ListTile(
             title: Text('App version'.toUpperCase(), style: TextStyle(color: Colors.black54,),),
-            trailing: Text("V2.0.2"),
+            trailing: Text("V2.0.3"),
           ),
 
         ],

@@ -28,74 +28,86 @@ class _ScheduleState extends State<Schedule> {
             builder: (BuildContext context, snapshot) {
               var response = snapshot.data;
               if (response != null) {
-                var keyName = [];
-                response.forEach((key, value) {
-                  keyName.add(key);
-                });
-                return Column(
-                  children: <Widget>[
-                    // Dropdown
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: Container(
-                        padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        margin: EdgeInsets.only(
-                            left: 10.0, right: 10.0, top: 10, bottom: 5),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: selected,
-                            hint: Text('Select Service Type'),
-                            items: keyName.map((item) {
-                              return DropdownMenuItem<String>(
-                                value: item.toString(),
-                                child: Text(item.toString()),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selected = value;
-                                subjectList = response[value];
-                              });
-                            },
+                if(response.length > 0 ) {
+                  var keyName = [];
+                  response.forEach((key, value) {
+                    keyName.add(key);
+                  });
+                  return Column(
+                    children: <Widget>[
+                      // Dropdown
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                          margin: EdgeInsets.only(
+                              left: 10.0, right: 10.0, top: 10, bottom: 5),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black26),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(5.0))),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              value: selected,
+                              hint: Text('Select Service Type'),
+                              items: keyName.map((item) {
+                                return DropdownMenuItem<String>(
+                                  value: item.toString(),
+                                  child: Text(item.toString()),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selected = value;
+                                  subjectList = response[value];
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                        itemCount: subjectList.length,
-                        itemBuilder: (BuildContext context, int subIndex) {
-                          return Card(
-                            child: ListTile(
-                              title: Text(
-                                subjectList[subIndex]['subject_name']
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.blueAccent),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                          itemCount: subjectList.length,
+                          itemBuilder: (BuildContext context, int subIndex) {
+                            return Card(
+                              child: ListTile(
+                                title: Text(
+                                  subjectList[subIndex]['subject_name']
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.blueAccent),
+                                ),
+                                subtitle: Text(
+                                  subjectList[subIndex]['teacher_name']
+                                      .toString(),
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                trailing: Text(
+                                    "Time : \n" +
+                                        subjectList[subIndex]['timeslot']
+                                            .toString(),
+                                    style: TextStyle(fontSize: 18)),
                               ),
-                              subtitle: Text(
-                                subjectList[subIndex]['teacher_name']
-                                    .toString(),
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              trailing: Text(
-                                  "Time : \n" +
-                                      subjectList[subIndex]['timeslot']
-                                          .toString(),
-                                  style: TextStyle(fontSize: 18)),
-                            ),
-                          );
-                        }),
-                  ],
-                );
+                            );
+                          }),
+                    ],
+                  );
+                } else {
+                  return Container(
+                    height: MediaQuery.of(context).size.width,
+                    child: Center(
+                        child: Text(
+                          "NO RECORD FOUND",
+                          style: TextStyle(fontSize: 15),
+                        )
+                    ),
+                  );
+                }
               } else {
                 return Center(
                     child: Text(
@@ -111,15 +123,17 @@ class _ScheduleState extends State<Schedule> {
   _weeklyScheduleClass() async {
     final result = await ServerAPI().weeklyScheduleClass();
     if (isFirst) {
-      var keyName = [];
-      result['data'].forEach((key, value) {
-        keyName.add(key);
-      });
-      setState(() {
-        selected = keyName[0];
-        subjectList = result['data'][keyName[0]];
-        isFirst = false;
-      });
+      if(result['data'].length > 0 ) {
+        var keyName = [];
+        result['data'].forEach((key, value) {
+          keyName.add(key);
+        });
+        setState(() {
+          selected = keyName[0];
+          subjectList = result['data'][keyName[0]];
+          isFirst = false;
+        });
+      }
     }
     return result['data'];
   }
