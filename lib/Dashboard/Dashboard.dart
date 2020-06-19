@@ -9,6 +9,7 @@ import '../Schedule/Schedule.dart';
 import '../ServerAPI.dart';
 import '../CustomDrawer.dart';
 import '../Support/Contact.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -58,7 +59,13 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    requestPermission();
     testStorage();
+  }
+
+  requestPermission() async {
+    await Permission.camera.request();
+    await Permission.microphone.request();
   }
 
   testStorage() async {

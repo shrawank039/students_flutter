@@ -12,8 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import '../FileViewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:jitsi_meet/jitsi_meet.dart';
-import 'package:jitsi_meet/jitsi_meeting_listener.dart';
+import 'StartAudioCall.dart';
 
 class MyChatScreen extends StatefulWidget {
   final String teacher;
@@ -23,9 +22,9 @@ class MyChatScreen extends StatefulWidget {
   final String class_status;
   final String student_id;
   final String subjectID;
+  final String class_name;
 
-  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject,
-      this.student_id, this.chat_group_id, this.subjectID);
+  MyChatScreen(this.calss_id, this.class_status, this.teacher, this.subject, this.student_id, this.chat_group_id, this.subjectID, this.class_name);
 
   @override
   _MyChatState createState() => _MyChatState();
@@ -509,33 +508,8 @@ class _MyChatState extends State<MyChatScreen> {
 
   _joinLiveClass() async {
     final teacher = await ServerAPI().getUserInfo();
-    try {
-      var options = JitsiMeetingOptions()
-        ..room = widget.chat_group_id.toString() // Required, spaces will be trimmed
-        ..serverURL = "https://meet.21century.in"
-        ..subject = widget.subject.toString()
-        ..userDisplayName = teacher['student_name'].toString()
-        ..audioOnly = false
-        ..audioMuted = false
-        ..videoMuted = true;
-
-      await JitsiMeet.joinMeeting(options,
-          listener: JitsiMeetingListener(
-              onConferenceWillJoin: ({message}) {
-                print("Class WillJoin");
-                //debugPrint("${options.room} will join with message: $message");
-              }, onConferenceJoined: ({message}) async {
-            print("Class Joined");
-
-            //debugPrint("${options.room} joined with message: $message");
-          }, onConferenceTerminated: ({message}) async {
-            print("Class Terminated");
-            //debugPrint("${options.room} terminated with message: $message");
-          })
-      );
-    } catch (error) {
-      debugPrint("error: $error");
-    }
+    Route route = MaterialPageRoute(builder: (context) => StartAudioCall(widget.chat_group_id, teacher['student_code'], teacher['student_name'], widget.subject, widget.class_name));
+    await Navigator.push(context, route);
   }
 
   @override

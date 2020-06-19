@@ -58,7 +58,8 @@ class _GroupChatState extends State<GroupChat> {
                                 allSubject[index]['subject_name'].toString(),
                                 user['id'],
                                 allSubject[index]['chat_room_id'].toString(),
-                                allSubject[index]['subject_id'].toString()
+                                allSubject[index]['subject_id'].toString(),
+                                allSubject[index]['class_name'].toString()
                             ));
                             await Navigator.push(context, route);
                           },
@@ -125,7 +126,8 @@ class _GroupChatState extends State<GroupChat> {
                     response[index]['subject_name'].toString(),
                     user['id'],
                     response[index]['chat_room_id'].toString(),
-                    response[index]['subject_id'].toString()
+                    response[index]['subject_id'].toString(),
+                    response[index]['class_name'].toString(),
                 ));
                 await Navigator.push(context, route);
               },
