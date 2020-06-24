@@ -105,6 +105,7 @@ class _StartAudioCallState extends State<StartAudioCall> {
                       crossPlatform: InAppWebViewOptions(
                         mediaPlaybackRequiresUserGesture: false,
                         debuggingEnabled: false,
+                        clearCache: true
                       ),
                     ),
                     onWebViewCreated: (InAppWebViewController controller) {
