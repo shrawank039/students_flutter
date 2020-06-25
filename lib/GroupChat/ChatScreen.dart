@@ -488,7 +488,7 @@ class _MyChatState extends State<MyChatScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Cancle'),
+              child: Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
