@@ -21,6 +21,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.2'
 }
 
+// apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -41,8 +42,8 @@ android {
         applicationId "com.matrixdeveloper.students"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3 //flutterVersionCode.toInteger()
-        versionName "2.0.2" //flutterVersionName
+        versionCode 4 //flutterVersionCode.toInteger()
+        versionName "2.0.3" //flutterVersionName
     }
 
     compileOptions {

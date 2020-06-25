@@ -164,10 +164,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 10),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         child: Center(
                             child: Text("Academic Information".toUpperCase())),
                       ),

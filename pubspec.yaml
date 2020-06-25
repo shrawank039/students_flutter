@@ -33,7 +33,7 @@ dependencies:
   flutter_spinkit: "^4.1.2"
   http: ^0.12.1
   shared_preferences: ^0.5.7+1
-  onesignal_flutter: ^2.0.0
+  onesignal_flutter:
   adhara_socket_io: ^0.4.1
   image_picker: ^0.6.6+1
   cached_network_image: ^2.2.0+1
