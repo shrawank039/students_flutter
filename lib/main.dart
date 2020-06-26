@@ -3,6 +3,9 @@ import 'package:students/Auth/Login.dart';
 import 'package:students/Dashboard/Dashboard.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:students/ServerAPI.dart';
+import 'package:students/XDvideo_chat.dart';
+
+import 'XDtext_chatbottomsheet.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,61 +20,57 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-  class _MyAppState extends State<MyApp> {
-    @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        title: 'Fluter',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          accentColor: Colors.blue,
-          primaryColor: Colors.white,
-          primaryColorDark: Colors.white,
-          fontFamily: 'Gamja Flower',
-        ),
-        home: SetHomePage(),
-      );
-    }
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
-  class SetHomePage extends StatefulWidget {
-    @override
-    _SetHomePageState createState() => _SetHomePageState();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fluter',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        accentColor: Colors.blue,
+        primaryColor: Colors.white,
+        primaryColorDark: Colors.white,
+        fontFamily: 'Gamja Flower',
+      ),
+      home: XDvideo_chat(), // XDtext_chatbottomsheet SetHomePage
+    );
   }
+}
 
-  class _SetHomePageState extends State<SetHomePage> {
-    @override
-    Widget build(BuildContext context) {
-      return FutureBuilder(
+class SetHomePage extends StatefulWidget {
+  @override
+  _SetHomePageState createState() => _SetHomePageState();
+}
+
+class _SetHomePageState extends State<SetHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
         future: getLoginStatus(),
-          builder: (BuildContext context, snapshot) {
-            if(snapshot.data != null){
-              if(snapshot.data){
-                return Dashboard();
-              } else {
-                return Login();
-              }
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.data != null) {
+            if (snapshot.data) {
+              return Dashboard();
             } else {
-              return Container();
+              return Login();
             }
+          } else {
+            return Container();
           }
-      );
-    }
-
-    getLoginStatus() async {
-      if (await ServerAPI().isLogin()) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
+        });
   }
 
-
+  getLoginStatus() async {
+    if (await ServerAPI().isLogin()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

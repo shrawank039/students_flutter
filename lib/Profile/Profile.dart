@@ -170,7 +170,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       Container(
                         margin:
-                        EdgeInsets.only(top: 10.0, left: 30.0, bottom: 20),
+                            EdgeInsets.only(top: 10.0, left: 30.0, bottom: 20),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
