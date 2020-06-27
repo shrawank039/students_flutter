@@ -5,8 +5,6 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:students/ServerAPI.dart';
 import 'package:students/XDvideo_chat.dart';
 
-import 'XDtext_chatbottomsheet.dart';
-
 void main() {
   runApp(MyApp());
   OneSignal.shared.init("0ff4329e-5eda-4e47-8de0-0e4f05fb6f50");

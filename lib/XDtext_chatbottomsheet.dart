@@ -5,7 +5,6 @@ class XDtext_chatbottomsheet extends StatelessWidget {
   XDtext_chatbottomsheet({
     Key key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
