@@ -273,7 +273,6 @@ class _DashboardState extends State<Dashboard> {
   versionCheck() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String versionName = packageInfo.version;
-    var myContext = context;
     final result = await ServerAPI().versionCheck();
     if(result['data']['version_code'].toString() != versionName.toString()){
       showDialog<void>(
@@ -294,7 +293,6 @@ class _DashboardState extends State<Dashboard> {
                 child: Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pop(myContext);
                 },
               ),
               FlatButton(

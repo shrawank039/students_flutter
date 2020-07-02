@@ -13,6 +13,7 @@ import '../FileViewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'StartAudioCall.dart';
+import 'StartVideoCall.dart';
 
 class MyChatScreen extends StatefulWidget {
   final String teacher;
@@ -99,7 +100,7 @@ class _MyChatState extends State<MyChatScreen> {
     });
     socket.on("group_chat_room/LiveClassEvent", (message) {
         if(message["room_id"] == widget.chat_group_id && message["status"] == "online"){
-          showAlertDialog();
+          showAlertDialog(message["call_type"].toString());
         }
     });
     socket.connect();
@@ -464,14 +465,14 @@ class _MyChatState extends State<MyChatScreen> {
     if(result['status'].toString() != "failure"){
       setState(() {
         if(result['data']['status'].toString() == "online"){
-          showAlertDialog();
+          showAlertDialog(result['data']['call_type'].toString());
         }
         isLiveClassGoing = result['data']['status'].toString();
       });
     }
   }
 
-  showAlertDialog() {
+  showAlertDialog(call_type) {
 
     return showDialog<void>(
       context: context,
@@ -497,7 +498,11 @@ class _MyChatState extends State<MyChatScreen> {
               child: Text('Join Live Class'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                _joinLiveClass();
+                if(call_type == "Video"){
+                  _joinLiveVideoClass();
+                } else {
+                  _joinLiveClass();
+                }
               },
             ),
           ],
@@ -509,6 +514,12 @@ class _MyChatState extends State<MyChatScreen> {
   _joinLiveClass() async {
     final teacher = await ServerAPI().getUserInfo();
     Route route = MaterialPageRoute(builder: (context) => StartAudioCall(widget.chat_group_id, teacher['student_code'], teacher['student_name'], widget.subject, widget.class_name));
+    await Navigator.push(context, route);
+  }
+
+  _joinLiveVideoClass() async {
+    final teacher = await ServerAPI().getUserInfo();
+    Route route = MaterialPageRoute(builder: (context) => StartVideoCall(widget.chat_group_id, teacher['student_code'], teacher['student_name'], widget.subject, widget.class_name));
     await Navigator.push(context, route);
   }
 
